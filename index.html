@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <title>GCX Change Enablement Portal</title>
+  <script src='https://cdn.tailwindcss.com'></script>
+  <script src='https://unpkg.com/lucide@latest'></script>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap' rel='stylesheet'>
+  <style>
+    :root { color-scheme: light; }
+    html, body { height: 100%; }
+    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .glass { backdrop-filter: blur(16px); background: rgba(255,255,255,0.82); }
+    .card { background:#fff; border:1px solid #e2e8f0; border-radius:24px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06); }
+    .metric { border:1px solid #e2e8f0; border-radius:20px; background:#fff; }
+    .metric h3 { font-size: 2rem; line-height: 1; font-weight: 900; letter-spacing: -0.05em; }
+    .sidebar-link { border-radius: 16px; padding: 12px 14px; display:flex; align-items:center; gap:12px; color:#475569; font-weight:700; }
+    .sidebar-link.active { background:#eef2ff; color:#312e81; }
+    .nav-pill.active { background:#4f46e5; color:#fff; box-shadow: 0 12px 24px rgba(79,70,229,.18); }
+    .step-dot { min-width: 42px; height: 42px; border-radius:999px; display:flex; align-items:center; justify-content:center; border:1px solid #e2e8f0; background:#fff; color:#64748b; font-weight:800; }
+    .step-dot.active { background:#4f46e5; color:#fff; border-color:#4f46e5; }
+    .step-dot.done { background:#22c55e; color:#fff; border-color:#22c55e; }
+    .field { width:100%; border:1px solid #e2e8f0; border-radius:16px; padding:14px 16px; outline:none; background:#fff; }
+    .field:focus { border-color:#6366f1; box-shadow:0 0 0 4px rgba(99,102,241,.10); }
+    .kpi-badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 10px; font-size:12px; font-weight:800; }
+  </style>
+</head>
+<body class='bg-slate-50 text-slate-900'>
+  <div class='min-h-screen flex'>
+    <aside class='w-72 bg-white border-r border-slate-200 flex flex-col p-6'>
+      <div class='mb-10'>
+        <div class='flex items-center gap-3 mb-2'>
+          <div class='w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200'>
+            <i data-lucide='sparkles' class='w-5 h-5'></i>
+          </div>
+          <div>
+            <div class='font-extrabold text-xl tracking-tight'>GCX Change</div>
+            <div class='text-xs uppercase tracking-[0.22em] text-slate-400 font-semibold'>Enablement Portal</div>
+          </div>
+        </div>
+        <p class='text-sm text-slate-500 mt-3 leading-6'>A single place for intake, prioritization, toolkit assets, change calendar, and adoption tracking.</p>
+      </div>
+
+      <nav class='space-y-2' id='sidebar-nav'>
+        <button class='sidebar-link active' data-view='dashboard'><i data-lucide='layout-dashboard' class='w-4 h-4'></i>Dashboard</button>
+        <button class='sidebar-link' data-view='intake'><i data-lucide='plus-circle' class='w-4 h-4'></i>Change Intake</button>
+        <button class='sidebar-link' data-view='portfolio'><i data-lucide='layers-3' class='w-4 h-4'></i>Portfolio</button>
+        <button class='sidebar-link' data-view='toolkit'><i data-lucide='book-open' class='w-4 h-4'></i>Toolkit</button>
+        <button class='sidebar-link' data-view='manager'><i data-lucide='users' class='w-4 h-4'></i>Manager Hub</button>
+        <button class='sidebar-link' data-view='analytics'><i data-lucide='bar-chart-3' class='w-4 h-4'></i>Analytics</button>
+      </nav>
+
+      <div class='mt-auto pt-6 border-t border-slate-100'>
+        <div class='card p-4 bg-slate-50 border-slate-100 rounded-2xl'>
+          <div class='flex items-center gap-3'>
+            <div class='w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold'>AT</div>
+            <div>
+              <div class='font-bold'>Alex Thompson</div>
+              <div class='text-xs text-slate-500'>Change Lead</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class='flex-1 flex flex-col min-w-0'>
+      <header class='h-20 glass border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-20'>
+        <div>
+          <div class='text-xl font-extrabold tracking-tight'>GCX Change Platform</div>
+          <div class='text-sm text-slate-500' id='role-subtitle'>Portfolio view and decision support for leaders</div>
+        </div>
+
+        <div class='flex items-center gap-3'>
+          <div class='flex rounded-full bg-slate-100 p-1 border border-slate-200'>
+            <button class='nav-pill active px-4 py-2 text-sm font-semibold rounded-full' data-role='Leader'>Leader</button>
+            <button class='nav-pill px-4 py-2 text-sm font-semibold rounded-full' data-role='Manager'>Manager</button>
+            <button class='nav-pill px-4 py-2 text-sm font-semibold rounded-full' data-role='Change Lead'>Change Lead</button>
+          </div>
+          <button class='w-11 h-11 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-indigo-600'>
+            <i data-lucide='bell' class='w-5 h-5'></i>
+          </button>
+          <button class='w-11 h-11 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-indigo-600'>
+            <i data-lucide='help-circle' class='w-5 h-5'></i>
+          </button>
+        </div>
+      </header>
+
+      <div class='flex-1 overflow-y-auto p-8 lg:p-10'>
+        <!-- Dashboard -->
+        <section id='view-dashboard' class='space-y-8'>
+          <div class='flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4'>
+            <div>
+              <h1 class='text-4xl font-black tracking-tight'>Welcome back, Alex</h1>
+              <p class='mt-2 text-slate-500'>Here is what is happening across the GCX change portfolio today.</p>
+            </div>
+            <div class='flex gap-3'>
+              <button class='px-4 py-3 rounded-2xl border border-slate-200 bg-white font-semibold text-sm flex items-center gap-2'><i data-lucide='calendar' class='w-4 h-4'></i> Last 90 Days</button>
+              <button class='px-5 py-3 rounded-2xl bg-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-200 flex items-center gap-2'><i data-lucide='download' class='w-4 h-4'></i> Generate Report</button>
+            </div>
+          </div>
+
+          <div class='grid md:grid-cols-2 xl:grid-cols-4 gap-5'>
+            <div class='metric p-6'>
+              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>Active Changes</span><i data-lucide='layers-3' class='w-5 h-5 text-indigo-500'></i></div>
+              <h3>24</h3>
+              <div class='mt-3 text-sm text-emerald-600 font-semibold'>↑ 12% vs last 90 days</div>
+            </div>
+            <div class='metric p-6'>
+              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>Adoption Rate</span><i data-lucide='trending-up' class='w-5 h-5 text-emerald-500'></i></div>
+              <h3 class='text-emerald-600'>92%</h3>
+              <div class='mt-3 text-sm text-emerald-600 font-semibold'>Healthy</div>
+            </div>
+            <div class='metric p-6'>
+              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>Risk Areas</span><i data-lucide='alert-circle' class='w-5 h-5 text-rose-500'></i></div>
+              <h3 class='text-rose-500'>3</h3>
+              <div class='mt-3 text-sm text-rose-500 font-semibold'>High attention</div>
+            </div>
+            <div class='metric p-6'>
+              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>New Requests</span><i data-lucide='clock-3' class='w-5 h-5 text-blue-500'></i></div>
+              <h3>7</h3>
+              <div class='mt-3 text-sm text-blue-500 font-semibold'>Awaiting intake</div>
+            </div>
+          </div>
+
+          <div class='grid xl:grid-cols-3 gap-5'>
+            <div class='xl:col-span-2 card p-6'>
+              <div class='flex items-center justify-between mb-6'>
+                <div>
+                  <h2 class='text-xl font-extrabold tracking-tight'>Change Calendar and Saturation Timeline</h2>
+                  <p class='text-sm text-slate-500 mt-1'>A quick view of when change load peaks across the year.</p>
+                </div>
+                <span class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'><i data-lucide='calendar-days' class='w-3.5 h-3.5'></i> Calendar view</span>
+              </div>
+
+              <div class='grid md:grid-cols-6 gap-3'>
+                <div class='rounded-2xl border border-emerald-100 bg-emerald-50 p-4'>
+                  <div class='text-xs font-bold uppercase tracking-widest text-emerald-700'>Jan</div>
+                  <div class='mt-5 h-16 rounded-xl bg-emerald-200 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[20%] bg-emerald-500'></div></div>
+                  <div class='mt-3 text-sm font-semibold text-emerald-700'>Low</div>
+                </div>
+                <div class='rounded-2xl border border-amber-100 bg-amber-50 p-4'>
+                  <div class='text-xs font-bold uppercase tracking-widest text-amber-700'>Feb</div>
+                  <div class='mt-5 h-16 rounded-xl bg-amber-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[45%] bg-amber-400'></div></div>
+                  <div class='mt-3 text-sm font-semibold text-amber-700'>Watch</div>
+                </div>
+                <div class='rounded-2xl border border-rose-100 bg-rose-50 p-4'>
+                  <div class='text-xs font-bold uppercase tracking-widest text-rose-700'>Mar</div>
+                  <div class='mt-5 h-16 rounded-xl bg-rose-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[85%] bg-rose-500'></div></div>
+                  <div class='mt-3 text-sm font-semibold text-rose-700'>Peak</div>
+                </div>
+                <div class='rounded-2xl border border-amber-100 bg-amber-50 p-4'>
+                  <div class='text-xs font-bold uppercase tracking-widest text-amber-700'>Apr</div>
+                  <div class='mt-5 h-16 rounded-xl bg-amber-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[40%] bg-amber-400'></div></div>
+                  <div class='mt-3 text-sm font-semibold text-amber-700'>Watch</div>
+                </div>
+                <div class='rounded-2xl border border-rose-100 bg-rose-50 p-4'>
+                  <div class='text-xs font-bold uppercase tracking-widest text-rose-700'>May</div>
+                  <div class='mt-5 h-16 rounded-xl bg-rose-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[75%] bg-rose-500'></div></div>
+                  <div class='mt-3 text-sm font-semibold text-rose-700'>Peak</div>
+                </div>
+                <div class='rounded-2xl border border-emerald-100 bg-emerald-50 p-4'>
+                  <div class='text-xs font-bold uppercase tracking-widest text-emerald-700'>Jun</div>
+                  <div class='mt-5 h-16 rounded-xl bg-emerald-200 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[25%] bg-emerald-500'></div></div>
+                  <div class='mt-3 text-sm font-semibold text-emerald-700'>Low</div>
+                </div>
+              </div>
+
+              <div class='mt-5 text-sm text-slate-500 leading-6'>March and May are the highest saturation windows in the current calendar. These are the months to protect with sequencing and stronger change control.</div>
+
+              <div class='mt-5 flex flex-wrap gap-3'>
+                <a href='https://sites.google.com/ebay.com/gsrchangecalendar/change-impact-calendar' target='_blank' class='inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-200'>
+                  <i data-lucide='external-link' class='w-4 h-4'></i> Open live change calendar
+                </a>
+                <span class='inline-flex items-center gap-2 px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm font-semibold text-slate-600'>
+                  <i data-lucide='shield-check' class='w-4 h-4 text-emerald-500'></i> Source of truth stays in Jira / Google Site
+                </span>
+              </div>
+            </div>
+
+            <div class='card p-6 bg-slate-950 text-white border-slate-900 overflow-hidden relative'>
+              <div class='absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-fuchsia-600/10'></div>
+              <div class='relative'>
+                <div class='flex items-center gap-2 mb-5'><i data-lucide='sparkles' class='w-5 h-5 text-indigo-300'></i><h2 class='text-xl font-extrabold'>AI Insights</h2></div>
+                <div class='space-y-3'>
+                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                    <div class='font-bold text-rose-300 mb-1'>Saturation Alert</div>
+                    <div class='text-sm text-slate-200'>Prepare Our People carries the heaviest load. Avoid adding new launches into March and May if possible.</div>
+                  </div>
+                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>
+                    <div class='font-bold text-emerald-300 mb-1'>Portfolio Opportunity</div>
+                    <div class='text-sm text-slate-200'>eBay Live and Reimagine Service / AI both need manager packs and role-based comms.</div>
+                  </div>
+                </div>
+                <button class='mt-6 w-full rounded-2xl border border-indigo-400/40 bg-indigo-500/10 py-3 font-semibold text-indigo-200 hover:bg-indigo-500/20 transition'>Run Full Portfolio Scan</button>
+              </div>
+            </div>
+          </div>
+
+          <div class='grid xl:grid-cols-2 gap-5'>
+            <div class='card p-6'>
+              <div class='flex items-center justify-between mb-4'>
+                <div>
+                  <h2 class='text-xl font-extrabold tracking-tight'>Hub and Spoke Model</h2>
+                  <p class='text-sm text-slate-500 mt-1'>PMO feeds the hub, the hub sets tier and standards, and the spokes deliver locally.</p>
+                </div>
+                <span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Operating model</span>
+              </div>
+              <div class='grid md:grid-cols-3 gap-3'>
+                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+                  <div class='font-bold mb-2'>Hub</div>
+                  <div class='text-sm text-slate-600 leading-6'>Change team owns standards, tiering, tools, and measurement.</div>
+                </div>
+                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+                  <div class='font-bold mb-2'>Spokes</div>
+                  <div class='text-sm text-slate-600 leading-6'>PMO, product, ops, and leaders execute within the model.</div>
+                </div>
+                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+                  <div class='font-bold mb-2'>Bronze</div>
+                  <div class='text-sm text-slate-600 leading-6'>Self-service in the portal with templates, FAQs, and light touch support.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class='card p-6'>
+              <div class='flex items-center justify-between mb-4'>
+                <div>
+                  <h2 class='text-xl font-extrabold tracking-tight'>Support Tier Guide</h2>
+                  <p class='text-sm text-slate-500 mt-1'>What leaders get at each support level.</p>
+                </div>
+                <span class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'>Gold / Silver / Bronze</span>
+              </div>
+              <div class='grid md:grid-cols-3 gap-3'>
+                <div class='rounded-2xl border border-amber-200 bg-amber-50 p-4'>
+                  <div class='font-extrabold text-amber-800 mb-2'>Gold</div>
+                  <ul class='text-sm text-amber-900/90 space-y-1 leading-6 list-disc pl-5'>
+                    <li>Full change plan</li><li>Sponsor coaching</li><li>Manager huddles</li><li>Learning and reinforcement</li>
+                  </ul>
+                </div>
+                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+                  <div class='font-extrabold text-slate-800 mb-2'>Silver</div>
+                  <ul class='text-sm text-slate-700 space-y-1 leading-6 list-disc pl-5'>
+                    <li>Guided support</li><li>Targeted comms</li><li>Manager pack</li><li>Office hours</li>
+                  </ul>
+                </div>
+                <div class='rounded-2xl border border-orange-200 bg-orange-50 p-4'>
+                  <div class='font-extrabold text-orange-800 mb-2'>Bronze</div>
+                  <ul class='text-sm text-orange-900/90 space-y-1 leading-6 list-disc pl-5'>
+                    <li>One-stop portal</li><li>Templates and FAQs</li><li>Auto-generated summary</li><li>Light touch support</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class='card p-6'>
+            <div class='flex items-center justify-between mb-4'>
+              <div>
+                <h2 class='text-xl font-extrabold tracking-tight'>Active Initiatives</h2>
+                <p class='text-sm text-slate-500 mt-1'>A view of the most visible GCX changes.</p>
+              </div>
+              <button class='px-4 py-2 rounded-xl border border-slate-200 bg-white text-sm font-semibold'>View All Initiatives</button>
+            </div>
+            <div class='overflow-hidden rounded-2xl border border-slate-200'>
+              <table class='w-full text-left'>
+                <thead class='bg-slate-50 text-slate-500 text-xs uppercase tracking-widest'>
+                  <tr>
+                    <th class='px-5 py-4'>Initiative</th>
+                    <th class='px-5 py-4'>Owner</th>
+                    <th class='px-5 py-4'>Audience</th>
+                    <th class='px-5 py-4'>Health</th>
+                    <th class='px-5 py-4'>Tier</th>
+                    <th class='px-5 py-4'>Timeline</th>
+                    <th class='px-5 py-4'>Status</th>
+                  </tr>
+                </thead>
+                <tbody class='divide-y divide-slate-100 text-sm'>
+                  <tr>
+                    <td class='px-5 py-4'><div class='font-bold'>Prepare Our People</div><div class='text-xs text-indigo-600 mt-1'>Reskill Our People</div></td>
+                    <td class='px-5 py-4'>GCX Change Team</td>
+                    <td class='px-5 py-4'>1,500</td>
+                    <td class='px-5 py-4'>72%</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Gold</span></td>
+                    <td class='px-5 py-4'>H1 2025</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
+                  </tr>
+                  <tr>
+                    <td class='px-5 py-4'><div class='font-bold'>Service Management Portfolio: Virtualised Support SME Deprecation</div><div class='text-xs text-emerald-600 mt-1'>Reimagine Service / AI</div></td>
+                    <td class='px-5 py-4'>Service Ops</td>
+                    <td class='px-5 py-4'>850</td>
+                    <td class='px-5 py-4'>61%</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Silver</span></td>
+                    <td class='px-5 py-4'>H2 2025</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
+                  </tr>
+                  <tr>
+                    <td class='px-5 py-4'><div class='font-bold'>eBay Live Streaming on Android</div><div class='text-xs text-indigo-600 mt-1'>eBay Live</div></td>
+                    <td class='px-5 py-4'>Product / CX</td>
+                    <td class='px-5 py-4'>420</td>
+                    <td class='px-5 py-4'>88%</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Silver</span></td>
+                    <td class='px-5 py-4'>Q3 2025</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td>
+                  </tr>
+                  <tr>
+                    <td class='px-5 py-4'><div class='font-bold'>eBay Live CS Fulfillment (Live) - Create-a-Package</div><div class='text-xs text-indigo-600 mt-1'>eBay Live</div></td>
+                    <td class='px-5 py-4'>Operations</td>
+                    <td class='px-5 py-4'>510</td>
+                    <td class='px-5 py-4'>69%</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Gold</span></td>
+                    <td class='px-5 py-4'>Q3 2025</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
+                  </tr>
+                  <tr>
+                    <td class='px-5 py-4'><div class='font-bold'>eBay Live Returns Cancellation Policy</div><div class='text-xs text-emerald-600 mt-1'>eBay Live</div></td>
+                    <td class='px-5 py-4'>Policy / Trust</td>
+                    <td class='px-5 py-4'>290</td>
+                    <td class='px-5 py-4'>90%</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-orange-50 text-orange-700 border border-orange-100'>Bronze</span></td>
+                    <td class='px-5 py-4'>Q4 2025</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td>
+                  </tr>
+                  <tr>
+                    <td class='px-5 py-4'><div class='font-bold'>eBay Live APAC H1 Expansions</div><div class='text-xs text-indigo-600 mt-1'>eBay Live</div></td>
+                    <td class='px-5 py-4'>APAC Operations</td>
+                    <td class='px-5 py-4'>630</td>
+                    <td class='px-5 py-4'>74%</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Silver</span></td>
+                    <td class='px-5 py-4'>H1 2025</td>
+                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Intake -->
+        <section id='view-intake' class='hidden max-w-6xl mx-auto space-y-8'>
+          <div class='flex items-end justify-between gap-4'>
+            <div>
+              <h1 class='text-4xl font-black tracking-tight'>Strategic Change Designer</h1>
+              <p class='text-slate-500 mt-2'>Projects do not come in as open requests. They usually arrive through PMO assignment, then the change hub triages them into Gold, Silver, or Bronze support.</p>
+            </div>
+            <div id='step-label' class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'>Step 1 of 4</div>
+          </div>
+
+          <div class='card p-5 bg-indigo-50 border-indigo-100'>
+            <div class='font-bold text-indigo-900 mb-1'>Why this intake exists</div>
+            <div class='text-sm text-indigo-800 leading-6'>
+              This is the front door for the change hub. It captures the project context, lets the team assign the right tier of support, and gives Bronze projects a self-service path inside the portal.
+              The goal is to make change visible, comparable, and measurable before it launches.
+            </div>
+          </div>
+
+          <div class='card p-6 lg:p-8'>
+            <div class='flex items-center gap-3 mb-8'>
+              <div class='step-dot active' id='dot-1'>1</div>
+              <div class='h-1 flex-1 rounded-full bg-slate-100'><div id='progress' class='h-1 rounded-full bg-indigo-600' style='width:25%'></div></div>
+              <div class='step-dot' id='dot-2'>2</div>
+              <div class='step-dot' id='dot-3'>3</div>
+              <div class='step-dot' id='dot-4'>4</div>
+            </div>
+
+            <div id='intake-step-1' class='space-y-5'>
+              <div class='grid md:grid-cols-2 gap-5'>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Project name</label>
+                  <input id='initiativeTitle' class='field' placeholder='e.g. eBay Live CS Fulfillment (Live) - Create-a-Package' />
+                </div>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>PMO source</label>
+                  <input id='pmoSource' class='field' placeholder='e.g. PMO assigned from quarterly roadmap' />
+                </div>
+              </div>
+              <div class='grid md:grid-cols-2 gap-5'>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Sponsor / owner</label>
+                  <input id='projectOwner' class='field' placeholder='e.g. Service Ops Leader' />
+                </div>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Workstream</label>
+                  <input id='projectWorkstream' class='field' placeholder='e.g. eBay Live / Reimagine Service / Prepare Our People' />
+                </div>
+              </div>
+              <div>
+                <label class='block text-sm font-semibold mb-2'>Primary objective</label>
+                <textarea id='initiativeObjective' class='field min-h-32' placeholder='What business problem are we solving?'></textarea>
+              </div>
+            </div>
+
+            <div id='intake-step-2' class='space-y-5 hidden'>
+              <div class='grid xl:grid-cols-2 gap-5'>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Audience size</label>
+                  <input id='audienceSize' type='range' min='10' max='2000' value='150' class='w-full' />
+                  <div class='text-sm text-slate-500 mt-2'><span id='audienceValue'>150</span> impacted people</div>
+                </div>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Functional complexity</label>
+                  <div class='grid grid-cols-5 gap-3'>
+                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='1'>1</button>
+                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='2'>2</button>
+                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='3'>3</button>
+                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='4'>4</button>
+                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='5'>5</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class='grid md:grid-cols-3 gap-3'>
+                <div class='rounded-2xl border border-amber-200 bg-amber-50 p-4'>
+                  <div class='font-extrabold text-amber-800 mb-2'>Gold</div>
+                  <div class='text-sm text-amber-900/90 leading-6'>Full partnership for high impact work. Includes sponsor coaching, comms, manager huddles, learning, and adoption tracking.</div>
+                </div>
+                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
+                  <div class='font-extrabold text-slate-800 mb-2'>Silver</div>
+                  <div class='text-sm text-slate-700 leading-6'>Guided support. The team provides the toolkit, targeted comms, manager pack, and office hours.</div>
+                </div>
+                <div class='rounded-2xl border border-orange-200 bg-orange-50 p-4'>
+                  <div class='font-extrabold text-orange-800 mb-2'>Bronze</div>
+                  <div class='text-sm text-orange-900/90 leading-6'>One-stop-shop support. Self-service templates, FAQs, and a light touch check-in only.</div>
+                </div>
+              </div>
+              <div class='text-sm text-slate-500 leading-6'>The change hub sets the final tier after reviewing the PMO assignment, business impact, and timing.</div>
+            </div>
+
+            <div id='intake-step-3' class='space-y-5 hidden'>
+              <div class='grid md:grid-cols-2 gap-5'>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Current behavior</label>
+                  <textarea id='beforeText' class='field min-h-40' placeholder='What do people do today?'></textarea>
+                </div>
+                <div>
+                  <label class='block text-sm font-semibold mb-2'>Desired behavior</label>
+                  <textarea id='afterText' class='field min-h-40' placeholder='What should they do differently?'></textarea>
+                </div>
+              </div>
+              <div class='grid md:grid-cols-2 xl:grid-cols-4 gap-3'>
+                <div class='card p-4 bg-indigo-50 border-indigo-100'>
+                  <div class='font-bold text-indigo-900 mb-1'>Comms</div>
+                  <div class='text-sm text-indigo-800'>Targeted messages for leaders and teams.</div>
+                </div>
+                <div class='card p-4 bg-indigo-50 border-indigo-100'>
+                  <div class='font-bold text-indigo-900 mb-1'>Managers</div>
+                  <div class='text-sm text-indigo-800'>Talking points, huddles, and reinforcement.</div>
+                </div>
+                <div class='card p-4 bg-indigo-50 border-indigo-100'>
+                  <div class='font-bold text-indigo-900 mb-1'>Learning</div>
+                  <div class='text-sm text-indigo-800'>Job aids and quick guides where needed.</div>
+                </div>
+                <div class='card p-4 bg-indigo-50 border-indigo-100'>
+                  <div class='font-bold text-indigo-900 mb-1'>Metrics</div>
+                  <div class='text-sm text-indigo-800'>What success looks like once live.</div>
+                </div>
+              </div>
+            </div>
+
+            <div id='intake-step-4' class='space-y-5 hidden'>
+              <div>
+                <label class='block text-sm font-semibold mb-2'>Go-live date</label>
+                <input id='goLiveDate' type='date' class='field' />
+              </div>
+              <div class='card p-5 bg-rose-50 border-rose-100 hidden' id='calendarWarning'>
+                <div class='font-bold text-rose-900 mb-1'>Calendar warning</div>
+                <div class='text-sm text-rose-800'>This lands in a known saturation window. Consider sequencing, rescoping, or shifting to protect the business.</div>
+              </div>
+              <div>
+                <label class='block text-sm font-semibold mb-2'>Success metrics</label>
+                <div class='grid md:grid-cols-3 gap-3'>
+                  <button class='metric-btn field text-left'>Usage</button>
+                  <button class='metric-btn field text-left'>Behavioral compliance</button>
+                  <button class='metric-btn field text-left'>CSAT / AHT</button>
+                </div>
+              </div>
+            </div>
+
+            <div class='flex items-center justify-between mt-8 pt-6 border-t border-slate-100'>
+              <button id='backBtn' class='px-5 py-3 rounded-2xl border border-slate-200 bg-white font-semibold disabled:opacity-40'>Back</button>
+              <div class='flex items-center gap-3'>
+                <button id='aiFillBtn' class='px-5 py-3 rounded-2xl border border-indigo-200 bg-indigo-50 text-indigo-700 font-semibold'>Auto-fill demo data</button>
+                <button id='nextBtn' class='px-6 py-3 rounded-2xl bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-200'>Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <div id='summaryCard' class='hidden card p-6 lg:p-8'>
+            <div class='flex items-center justify-between flex-wrap gap-4 mb-5'>
+              <h2 class='text-2xl font-black tracking-tight'>Change Summary Dashboard</h2>
+              <span id='summaryTierBadge' class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Gold</span>
+            </div>
+            <div class='grid md:grid-cols-3 gap-4 mb-5'>
+              <div class='card p-4 bg-slate-50 border-slate-100'><div class='text-xs uppercase tracking-widest text-slate-500 font-bold mb-2'>Tier</div><div id='summaryTier' class='text-2xl font-black'>Gold</div></div>
+              <div class='card p-4 bg-slate-50 border-slate-100'><div class='text-xs uppercase tracking-widest text-slate-500 font-bold mb-2'>Impact score</div><div id='summaryImpact' class='text-2xl font-black'>0</div></div>
+              <div class='card p-4 bg-slate-50 border-slate-100'><div class='text-xs uppercase tracking-widest text-slate-500 font-bold mb-2'>Manager effort</div><div id='summaryManager' class='text-2xl font-black'>Medium</div></div>
+            </div>
+            <div class='card p-5 bg-indigo-50 border-indigo-100 mb-5'>
+              <div class='text-sm text-indigo-900 font-bold mb-2'>Recommended interventions</div>
+              <div id='summaryInterventions' class='text-sm text-indigo-800 leading-6'></div>
+            </div>
+            <div class='card p-5 bg-slate-950 text-white border-slate-900'>
+              <div class='text-sm text-white/80 font-bold mb-2'>One-stop shop guidance</div>
+              <div class='text-sm text-slate-200 leading-6'>Bronze projects stay in the portal and use templates, FAQs, and self-service guidance. Silver projects get guided support. Gold projects get full partnership.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Portfolio -->
+        <section id='view-portfolio' class='hidden space-y-8 max-w-6xl mx-auto'>
+          <div>
+            <h1 class='text-4xl font-black tracking-tight'>Active Portfolio</h1>
+            <p class='text-slate-500 mt-2'>A visible list of changes, ownership, tiering, and readiness.</p>
+          </div>
+          <div class='card p-6 overflow-hidden'>
+            <table class='w-full text-left'>
+              <thead class='text-xs uppercase tracking-widest text-slate-500 border-b border-slate-100'>
+                <tr>
+                  <th class='py-4'>Initiative</th><th>Owner</th><th>Audience</th><th>Health</th><th>Tier</th><th>Timeline</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody class='divide-y divide-slate-100 text-sm'>
+                <tr><td class='py-4 font-semibold'>Prepare Our People</td><td>GCX Change Team</td><td>1,500</td><td>72%</td><td>Gold</td><td>H1 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
+                <tr><td class='py-4 font-semibold'>Service Management Portfolio: Virtualised Support SME Deprecation</td><td>Service Ops</td><td>850</td><td>61%</td><td>Silver</td><td>H2 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
+                <tr><td class='py-4 font-semibold'>eBay Live Streaming on Android</td><td>Product / CX</td><td>420</td><td>88%</td><td>Silver</td><td>Q3 2025</td><td><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td></tr>
+                <tr><td class='py-4 font-semibold'>eBay Live CS Fulfillment (Live) - Create-a-Package</td><td>Operations</td><td>510</td><td>69%</td><td>Gold</td><td>Q3 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
+                <tr><td class='py-4 font-semibold'>eBay Live Returns Cancellation Policy</td><td>Policy / Trust</td><td>290</td><td>90%</td><td>Bronze</td><td>Q4 2025</td><td><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td></tr>
+                <tr><td class='py-4 font-semibold'>eBay Live APAC H1 Expansions</td><td>APAC Operations</td><td>630</td><td>74%</td><td>Silver</td><td>H1 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Toolkit -->
+        <section id='view-toolkit' class='hidden max-w-6xl mx-auto space-y-8'>
+          <div>
+            <h1 class='text-4xl font-black tracking-tight'>Toolkit Library</h1>
+            <p class='text-slate-500 mt-2'>Self-service templates for change leads and Bronze projects.</p>
+          </div>
+          <div class='grid md:grid-cols-2 xl:grid-cols-3 gap-5'>
+            <div class='card p-5'><div class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4'>Impact Assessment</div><div class='font-bold text-lg mb-2'>GCX Change Impact Matrix</div><p class='text-sm text-slate-500'>Quantify people, process, and tool change quickly.</p></div>
+            <div class='card p-5'><div class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100 mb-4'>Manager Packs</div><div class='font-bold text-lg mb-2'>First 15 Huddle Guide</div><p class='text-sm text-slate-500'>Prompts and FAQs for team briefings.</p></div>
+            <div class='card p-5'><div class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100 mb-4'>Metrics</div><div class='font-bold text-lg mb-2'>Readiness Survey Template</div><p class='text-sm text-slate-500'>Track confidence and adoption risk before launch.</p></div>
+          </div>
+        </section>
+
+        <!-- Manager -->
+        <section id='view-manager' class='hidden max-w-6xl mx-auto space-y-8'>
+          <div>
+            <h1 class='text-4xl font-black tracking-tight'>Manager Hub</h1>
+            <p class='text-slate-500 mt-2'>What managers need to do next to help adoption stick.</p>
+          </div>
+          <div class='grid lg:grid-cols-3 gap-5'>
+            <div class='card p-5 lg:col-span-2'>
+              <div class='font-bold mb-4'>Activation tasks</div>
+              <div class='space-y-3'>
+                <div class='flex items-center justify-between p-4 rounded-2xl border border-slate-100'><span>Review huddle pack</span><span class='text-emerald-600 font-semibold'>Done</span></div>
+                <div class='flex items-center justify-between p-4 rounded-2xl border border-slate-100'><span>Brief your team</span><span class='text-amber-600 font-semibold'>Due soon</span></div>
+                <div class='flex items-center justify-between p-4 rounded-2xl border border-slate-100'><span>Observe new behavior</span><span class='text-slate-500 font-semibold'>Pending</span></div>
+              </div>
+            </div>
+            <div class='card p-5 bg-slate-950 text-white border-slate-900'>
+              <div class='font-bold mb-3'>Strategy tip</div>
+              <p class='text-sm text-slate-200'>Managers who use a simple before and after script in 1:1s see faster adoption.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Analytics -->
+        <section id='view-analytics' class='hidden max-w-6xl mx-auto space-y-8'>
+          <div>
+            <h1 class='text-4xl font-black tracking-tight'>Change Intelligence</h1>
+            <p class='text-slate-500 mt-2'>Readiness, sentiment, and portfolio health over time.</p>
+          </div>
+          <div class='grid md:grid-cols-4 gap-5'>
+            <div class='metric p-6'><div class='text-sm text-slate-500'>Adoption Rate</div><h3 class='text-emerald-600 mt-2'>78.2%</h3></div>
+            <div class='metric p-6'><div class='text-sm text-slate-500'>Sentiment</div><h3 class='mt-2'>84/100</h3></div>
+            <div class='metric p-6'><div class='text-sm text-slate-500'>Manager Buy-in</div><h3 class='text-indigo-600 mt-2'>91%</h3></div>
+            <div class='metric p-6'><div class='text-sm text-slate-500'>Portfolio Risk</div><h3 class='text-rose-500 mt-2'>Normal</h3></div>
+          </div>
+          <div class='grid lg:grid-cols-3 gap-5'>
+            <div class='card p-6 lg:col-span-2'>
+              <div class='font-bold mb-4'>Readiness trend</div>
+              <div class='h-64 flex items-end gap-4'>
+                <div class='flex-1 bg-indigo-100 rounded-t-2xl h-[40%]'></div>
+                <div class='flex-1 bg-indigo-200 rounded-t-2xl h-[52%]'></div>
+                <div class='flex-1 bg-indigo-300 rounded-t-2xl h-[60%]'></div>
+                <div class='flex-1 bg-indigo-300 rounded-t-2xl h-[58%]'></div>
+                <div class='flex-1 bg-indigo-400 rounded-t-2xl h-[75%]'></div>
+                <div class='flex-1 bg-indigo-500 rounded-t-2xl h-[88%]'></div>
+                <div class='flex-1 bg-indigo-600 rounded-t-2xl h-[92%]'></div>
+                <div class='flex-1 bg-indigo-700 rounded-t-2xl h-[90%]'></div>
+              </div>
+            </div>
+            <div class='card p-6'>
+              <div class='font-bold mb-4'>Sentiment mix</div>
+              <div class='space-y-4 text-sm'>
+                <div><div class='flex justify-between mb-1'><span>Positive</span><span>65%</span></div><div class='h-2 bg-slate-100 rounded-full overflow-hidden'><div class='h-full bg-emerald-500 w-[65%]'></div></div></div>
+                <div><div class='flex justify-between mb-1'><span>Neutral</span><span>28%</span></div><div class='h-2 bg-slate-100 rounded-full overflow-hidden'><div class='h-full bg-amber-400 w-[28%]'></div></div></div>
+                <div><div class='flex justify-between mb-1'><span>Resistance</span><span>7%</span></div><div class='h-2 bg-slate-100 rounded-full overflow-hidden'><div class='h-full bg-rose-500 w-[7%]'></div></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const views = ['dashboard', 'intake', 'portfolio', 'toolkit', 'manager', 'analytics'];
+    const viewButtons = document.querySelectorAll('[data-view]');
+    const roleButtons = document.querySelectorAll('[data-role]');
+    const domainButtons = document.querySelectorAll('.domain-btn');
+    const complexityButtons = document.querySelectorAll('.complexity-btn');
+    const metricButtons = document.querySelectorAll('.metric-btn');
+
+    let currentStep = 1;
+    let selectedDomain = 'Technology';
+    let selectedComplexity = 3;
+    let selectedTier = 'Bronze';
+    const selectedMetrics = new Set(['Usage']);
+
+    const tierInterventions = {
+      Gold: ['Full change plan', 'Sponsor coaching', 'Manager huddles', 'Learning and reinforcement', 'Adoption tracking'],
+      Silver: ['Targeted comms', 'Manager pack', 'Office hours', 'Focused learning'],
+      Bronze: ['Self-service toolkit', 'FAQ', 'Portal summary', 'Light touch support']
+    };
+
+    function openView(view) {
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.toggle('hidden', v !== view);
+      });
+      viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+      if (view === 'intake') {
+        updateStepIndicators();
+      } else {
+        resetIntakeUI();
+      }
+    }
+
+    function resetIntakeUI() {
+      currentStep = 1;
+      showStep(1);
+      updateStepIndicators();
+      document.getElementById('summaryCard').classList.add('hidden');
+      document.getElementById('nextBtn').textContent = 'Continue';
+      document.getElementById('calendarWarning').classList.add('hidden');
+    }
+
+    function showStep(step) {
+      [1,2,3,4].forEach(n => document.getElementById(`intake-step-${n}`).classList.toggle('hidden', n !== step));
+    }
+
+    function updateStepIndicators() {
+      [1,2,3,4].forEach(n => {
+        const dot = document.getElementById(`dot-${n}`);
+        if (!dot) return;
+        dot.classList.remove('active', 'done');
+        if (n < currentStep) dot.classList.add('done');
+        if (n === currentStep) dot.classList.add('active');
+      });
+      document.getElementById('progress').style.width = `${(currentStep / 4) * 100}%`;
+      document.getElementById('step-label').textContent = `Step ${currentStep} of 4`;
+      document.getElementById('nextBtn').textContent = currentStep === 4 ? 'Generate Summary' : 'Continue';
+    }
+
+    function calculateScore() {
+      const audience = parseInt(document.getElementById('audienceSize').value || '150', 10);
+      const title = document.getElementById('initiativeTitle').value.trim();
+      const objective = document.getElementById('initiativeObjective').value.trim();
+      const complexityScore = selectedComplexity * 14;
+      let score = complexityScore;
+      if (audience > 500) score += 22;
+      else if (audience > 100) score += 10;
+      if (selectedDomain === 'Policy') score += 8;
+      if (selectedMetrics.size >= 2) score += 5;
+      if (title.length > 0) score += 5;
+      if (objective.length > 20) score += 5;
+      score = Math.min(score, 100);
+
+      const tier = score >= 75 ? 'Gold' : score >= 45 ? 'Silver' : 'Bronze';
+      const manager = selectedComplexity >= 4 || selectedMetrics.size >= 3 ? 'High' : selectedComplexity >= 3 ? 'Medium' : 'Low';
+
+      selectedTier = tier;
+      document.getElementById('summaryTier').textContent = tier;
+      document.getElementById('summaryImpact').textContent = `${score}`;
+      document.getElementById('summaryManager').textContent = manager;
+      document.getElementById('summaryTierBadge').textContent = tier;
+      document.getElementById('summaryTierBadge').className = tier === 'Gold'
+        ? 'kpi-badge bg-amber-50 text-amber-700 border border-amber-100'
+        : tier === 'Silver'
+          ? 'kpi-badge bg-slate-100 text-slate-700 border border-slate-200'
+          : 'kpi-badge bg-orange-50 text-orange-700 border border-orange-100';
+      document.getElementById('summaryInterventions').innerHTML = tierInterventions[tier].map(x => `<div>• ${x}</div>`).join('');
+      document.getElementById('summaryCard').classList.remove('hidden');
+    }
+
+    function goNext() {
+      if (currentStep < 4) {
+        currentStep += 1;
+        showStep(currentStep);
+        updateStepIndicators();
+      } else {
+        calculateScore();
+        document.getElementById('summaryCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function goBack() {
+      if (currentStep > 1) {
+        currentStep -= 1;
+        showStep(currentStep);
+        updateStepIndicators();
+      }
+    }
+
+    function setRole(role) {
+      roleButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.role === role));
+      const subtitle = document.getElementById('role-subtitle');
+      subtitle.textContent = role === 'Leader'
+        ? 'Portfolio view and decision support for leaders'
+        : role === 'Manager'
+          ? 'Manager-ready actions, packs, and reinforcement'
+          : 'Intake, prioritization, and adoption orchestration';
+    }
+
+    function toggleButtonGroup(buttons, selectedValue, selectedClasses, unselectedClasses) {
+      buttons.forEach(btn => {
+        const isSelected = btn.dataset.value === selectedValue;
+        btn.classList.remove(...selectedClasses, ...unselectedClasses);
+        if (isSelected) btn.classList.add(...selectedClasses);
+        else btn.classList.add(...unselectedClasses);
+      });
+    }
+
+    domainButtons.forEach(btn => {
+      btn.dataset.value = btn.dataset.domain;
+      btn.addEventListener('click', () => {
+        selectedDomain = btn.dataset.domain;
+        toggleButtonGroup(domainButtons, selectedDomain, ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
+      });
+    });
+
+    complexityButtons.forEach(btn => {
+      btn.dataset.value = btn.dataset.complexity;
+      btn.addEventListener('click', () => {
+        selectedComplexity = parseInt(btn.dataset.complexity, 10);
+        toggleButtonGroup(complexityButtons, String(selectedComplexity), ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
+      });
+    });
+
+    metricButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const label = btn.textContent.trim();
+        if (selectedMetrics.has(label)) {
+          selectedMetrics.delete(label);
+          btn.classList.remove('border-indigo-600', 'bg-indigo-50', 'text-indigo-700');
+        } else {
+          selectedMetrics.add(label);
+          btn.classList.add('border-indigo-600', 'bg-indigo-50', 'text-indigo-700');
+        }
+      });
+    });
+
+    document.getElementById('audienceSize').addEventListener('input', (e) => {
+      document.getElementById('audienceValue').textContent = e.target.value;
+    });
+
+    document.getElementById('goLiveDate').addEventListener('change', (e) => {
+      const month = new Date(e.target.value).getMonth();
+      const warning = document.getElementById('calendarWarning');
+      if (month === 2 || month === 4) {
+        warning.classList.remove('hidden');
+      } else {
+        warning.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', goNext);
+    document.getElementById('backBtn').addEventListener('click', goBack);
+
+    document.getElementById('aiFillBtn').addEventListener('click', () => {
+      document.getElementById('initiativeTitle').value = 'eBay Live CS Fulfillment (Live) - Create-a-Package';
+      document.getElementById('pmoSource').value = 'PMO assigned from the H1 portfolio review';
+      document.getElementById('projectOwner').value = 'Operations Leader';
+      document.getElementById('projectWorkstream').value = 'eBay Live';
+      document.getElementById('initiativeObjective').value = 'Create a repeatable package workflow for live CS fulfilment and improve adoption with managers and frontline teams.';
+      document.getElementById('audienceSize').value = 510;
+      document.getElementById('audienceValue').textContent = '510';
+      selectedDomain = 'Process';
+      selectedComplexity = 4;
+      toggleButtonGroup(domainButtons, selectedDomain, ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
+      toggleButtonGroup(complexityButtons, String(selectedComplexity), ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
+    });
+
+    viewButtons.forEach(btn => btn.addEventListener('click', () => openView(btn.dataset.view)));
+    roleButtons.forEach(btn => btn.addEventListener('click', () => setRole(btn.dataset.role)));
+
+    openView('dashboard');
+    document.getElementById('goLiveDate').valueAsDate = new Date();
+    selectedTier = 'Bronze';
+    document.getElementById('summaryInterventions').innerHTML = tierInterventions.Bronze.map(x => `<div>• ${x}</div>`).join('');
+    document.getElementById('summaryTierBadge').textContent = 'Bronze';
+    lucide.createIcons();
+  </script>
+</body>
+</html>
