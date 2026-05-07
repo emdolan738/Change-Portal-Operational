@@ -507,28 +507,46 @@
           </div>
         </section>
 
-        <!-- Portfolio -->
-        <section id='view-portfolio' class='hidden space-y-8 max-w-6xl mx-auto'>
+        <!-- Survey -->
+        <section id='view-survey' class='hidden max-w-6xl mx-auto space-y-8'>
           <div>
-            <h1 class='text-4xl font-black tracking-tight'>Active Portfolio</h1>
-            <p class='text-slate-500 mt-2'>A visible list of changes, ownership, tiering, and readiness.</p>
+            <h1 class='text-4xl font-black tracking-tight'>Change Request Survey</h1>
+            <p class='text-slate-500 mt-2'>Use this to capture a real intake submission from PMO or the business.</p>
           </div>
-          <div class='card p-6 overflow-hidden'>
-            <table class='w-full text-left'>
-              <thead class='text-xs uppercase tracking-widest text-slate-500 border-b border-slate-100'>
-                <tr>
-                  <th class='py-4'>Initiative</th><th>Owner</th><th>Audience</th><th>Health</th><th>Tier</th><th>Timeline</th><th>Status</th>
-                </tr>
-              </thead>
-              <tbody class='divide-y divide-slate-100 text-sm'>
-                <tr><td class='py-4 font-semibold'>Prepare Our People</td><td>GCX Change Team</td><td>1,500</td><td>72%</td><td>Gold</td><td>H1 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
-                <tr><td class='py-4 font-semibold'>Service Management Portfolio: Virtualised Support SME Deprecation</td><td>Service Ops</td><td>850</td><td>61%</td><td>Silver</td><td>H2 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
-                <tr><td class='py-4 font-semibold'>eBay Live Streaming on Android</td><td>Product / CX</td><td>420</td><td>88%</td><td>Silver</td><td>Q3 2025</td><td><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td></tr>
-                <tr><td class='py-4 font-semibold'>eBay Live CS Fulfillment (Live) - Create-a-Package</td><td>Operations</td><td>510</td><td>69%</td><td>Gold</td><td>Q3 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
-                <tr><td class='py-4 font-semibold'>eBay Live Returns Cancellation Policy</td><td>Policy / Trust</td><td>290</td><td>90%</td><td>Bronze</td><td>Q4 2025</td><td><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td></tr>
-                <tr><td class='py-4 font-semibold'>eBay Live APAC H1 Expansions</td><td>APAC Operations</td><td>630</td><td>74%</td><td>Silver</td><td>H1 2025</td><td><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td></tr>
-              </tbody>
-            </table>
+          <div class='grid xl:grid-cols-2 gap-5'>
+            <div class='card p-6'>
+              <div class='flex items-center justify-between mb-4'>
+                <div>
+                  <h2 class='text-xl font-extrabold tracking-tight'>Embedded survey</h2>
+                  <p class='text-sm text-slate-500 mt-1'>Replace the placeholder URL with your actual Google Form link.</p>
+                </div>
+                <span class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'>Live intake</span>
+              </div>
+              <div class='rounded-2xl overflow-hidden border border-slate-200'>
+                <iframe
+                  src='YOUR_GOOGLE_FORM_LINK_HERE'
+                  width='100%'
+                  height='700'
+                  style='border:0;'
+                  loading='lazy'>
+                </iframe>
+              </div>
+            </div>
+            <div class='card p-6 bg-slate-950 text-white border-slate-900 overflow-hidden relative'>
+              <div class='absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-fuchsia-600/10'></div>
+              <div class='relative'>
+                <div class='flex items-center gap-2 mb-5'><i data-lucide='sparkles' class='w-5 h-5 text-indigo-300'></i><h2 class='text-xl font-extrabold'>How it works</h2></div>
+                <div class='space-y-3 text-sm text-slate-200 leading-6'>
+                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>PMO or the business completes the form.</div>
+                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>The change team reviews the request and assigns Gold, Silver, or Bronze support.</div>
+                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>Bronze projects use the portal as their self-service support hub.</div>
+                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>Gold and Silver projects receive guided change support, manager actions, and measurement.</div>
+                </div>
+                <a href='YOUR_GOOGLE_FORM_LINK_HERE' target='_blank' class='mt-6 w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-indigo-400/40 bg-indigo-500/10 py-3 font-semibold text-indigo-200 hover:bg-indigo-500/20 transition'>
+                  <i data-lucide='external-link' class='w-4 h-4'></i> Open survey in a new tab
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -608,7 +626,7 @@
   </div>
 
   <script>
-    const views = ['dashboard', 'intake', 'portfolio', 'toolkit', 'manager', 'analytics'];
+    const views = ['dashboard', 'intake', 'portfolio', 'toolkit', 'manager', 'analytics', 'survey'];
     const viewButtons = document.querySelectorAll('[data-view]');
     const roleButtons = document.querySelectorAll('[data-role]');
     const domainButtons = document.querySelectorAll('.domain-btn');
