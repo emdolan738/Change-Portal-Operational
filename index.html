@@ -1,648 +1,792 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-  <meta charset='UTF-8' />
-  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GCX Change Enablement Portal</title>
-  <script src='https://cdn.tailwindcss.com'></script>
-  <script src='https://unpkg.com/lucide@latest'></script>
-  <link rel='preconnect' href='https://fonts.googleapis.com'>
-  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
-  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap' rel='stylesheet'>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'Arial', 'sans-serif'] },
+          colors: {
+            ebay: {
+              blue: '#0064D2',
+              red: '#E53238',
+              yellow: '#F5AF02',
+              green: '#86B817',
+              ink: '#111827'
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    :root { color-scheme: light; }
+    :root {
+      color-scheme: light;
+      --ebay-blue:#0064D2;
+      --ebay-red:#E53238;
+      --ebay-yellow:#F5AF02;
+      --ebay-green:#86B817;
+      --ink:#111827;
+    }
     html, body { height: 100%; }
-    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-    .glass { backdrop-filter: blur(16px); background: rgba(255,255,255,0.82); }
-    .card { background:#fff; border:1px solid #e2e8f0; border-radius:24px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06); }
-    .metric { border:1px solid #e2e8f0; border-radius:20px; background:#fff; }
+    body { font-family: Poppins, Arial, sans-serif; }
+    .glass { backdrop-filter: blur(16px); background: rgba(255,255,255,0.88); }
+    .card { background:#fff; border:1px solid #e5e7eb; border-radius:24px; box-shadow: 0 14px 36px rgba(17, 24, 39, 0.06); }
+    .metric { border:1px solid #e5e7eb; border-radius:22px; background:#fff; box-shadow: 0 10px 28px rgba(17, 24, 39, 0.04); }
     .metric h3 { font-size: 2rem; line-height: 1; font-weight: 900; letter-spacing: -0.05em; }
-    .sidebar-link { border-radius: 16px; padding: 12px 14px; display:flex; align-items:center; gap:12px; color:#475569; font-weight:700; }
-    .sidebar-link.active { background:#eef2ff; color:#312e81; }
-    .nav-pill.active { background:#4f46e5; color:#fff; box-shadow: 0 12px 24px rgba(79,70,229,.18); }
-    .step-dot { min-width: 42px; height: 42px; border-radius:999px; display:flex; align-items:center; justify-content:center; border:1px solid #e2e8f0; background:#fff; color:#64748b; font-weight:800; }
-    .step-dot.active { background:#4f46e5; color:#fff; border-color:#4f46e5; }
-    .step-dot.done { background:#22c55e; color:#fff; border-color:#22c55e; }
-    .field { width:100%; border:1px solid #e2e8f0; border-radius:16px; padding:14px 16px; outline:none; background:#fff; }
-    .field:focus { border-color:#6366f1; box-shadow:0 0 0 4px rgba(99,102,241,.10); }
-    .kpi-badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 10px; font-size:12px; font-weight:800; }
+    .sidebar-link { border-radius: 16px; padding: 12px 14px; display:flex; align-items:center; gap:12px; color:#4b5563; font-weight:700; width:100%; text-align:left; }
+    .sidebar-link.active { background:#eff6ff; color:var(--ebay-blue); }
+    .nav-pill.active { background:var(--ebay-blue); color:#fff; box-shadow: 0 12px 24px rgba(0,100,210,.16); }
+    .step-dot { min-width: 42px; height: 42px; border-radius:999px; display:flex; align-items:center; justify-content:center; border:1px solid #e5e7eb; background:#fff; color:#6b7280; font-weight:800; }
+    .step-dot.active { background:var(--ebay-blue); color:#fff; border-color:var(--ebay-blue); }
+    .step-dot.done { background:var(--ebay-green); color:#fff; border-color:var(--ebay-green); }
+    .field { width:100%; border:1px solid #e5e7eb; border-radius:16px; padding:14px 16px; outline:none; background:#fff; font-size:14px; }
+    .field:focus { border-color:var(--ebay-blue); box-shadow:0 0 0 4px rgba(0,100,210,.10); }
+    .badge { display:inline-flex; align-items:center; gap:6px; border-radius:999px; padding:6px 10px; font-size:12px; font-weight:800; }
+    .badge-blue { background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; }
+    .badge-red { background:#fff1f2; color:#be123c; border:1px solid #fecdd3; }
+    .badge-yellow { background:#fffbeb; color:#b45309; border:1px solid #fde68a; }
+    .badge-green { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }
+    .tab-btn.active { background:var(--ebay-blue); color:white; }
+    .template-card { transition: transform .18s ease, box-shadow .18s ease; }
+    .template-card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(17, 24, 39, 0.10); }
+    .modal-backdrop { background: rgba(17,24,39,.55); }
+    .progress-track { height:8px; background:#f3f4f6; border-radius:999px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:999px; background:var(--ebay-blue); }
+    .tiny-label { font-size:11px; text-transform:uppercase; letter-spacing:.16em; font-weight:800; color:#6b7280; }
   </style>
 </head>
-<body class='bg-slate-50 text-slate-900'>
-  <div class='min-h-screen flex'>
-    <aside class='w-72 bg-white border-r border-slate-200 flex flex-col p-6'>
-      <div class='mb-10'>
-        <div class='flex items-center gap-3 mb-2'>
-          <div class='w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-200'>
-            <i data-lucide='sparkles' class='w-5 h-5'></i>
+
+<body class="bg-gray-50 text-gray-900">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-76 lg:w-80 bg-white border-r border-gray-200 flex flex-col p-6">
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-12 h-12 rounded-2xl bg-ebay-blue text-white flex items-center justify-center shadow-lg shadow-blue-100">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
           </div>
           <div>
-            <div class='font-extrabold text-xl tracking-tight'>GCX Change</div>
-            <div class='text-xs uppercase tracking-[0.22em] text-slate-400 font-semibold'>Enablement Portal</div>
+            <div class="font-black text-xl tracking-tight">GCX Change</div>
+            <div class="text-xs uppercase tracking-[0.22em] text-gray-400 font-semibold">Enablement Portal</div>
           </div>
         </div>
-        <p class='text-sm text-slate-500 mt-3 leading-6'>A single place for intake, prioritization, toolkit assets, change calendar, and adoption tracking.</p>
+        <p class="text-sm text-gray-500 leading-6">
+          A single place to define change, right-size support, activate leaders and managers, manage saturation, and track adoption.
+        </p>
       </div>
 
-      <nav class='space-y-2' id='sidebar-nav'>
-        <button class='sidebar-link active' data-view='dashboard'><i data-lucide='layout-dashboard' class='w-4 h-4'></i>Dashboard</button>
-        <button class='sidebar-link' data-view='intake'><i data-lucide='plus-circle' class='w-4 h-4'></i>Change Intake</button>
-        <button class='sidebar-link' data-view='portfolio'><i data-lucide='layers-3' class='w-4 h-4'></i>Portfolio</button>
-        <button class='sidebar-link' data-view='toolkit'><i data-lucide='book-open' class='w-4 h-4'></i>Toolkit</button>
-        <button class='sidebar-link' data-view='manager'><i data-lucide='users' class='w-4 h-4'></i>Manager Hub</button>
-        <button class='sidebar-link' data-view='analytics'><i data-lucide='bar-chart-3' class='w-4 h-4'></i>Analytics</button>
+      <nav class="space-y-2" id="sidebar-nav">
+        <button class="sidebar-link active" data-view="dashboard"><i data-lucide="layout-dashboard" class="w-4 h-4"></i>Dashboard</button>
+        <button class="sidebar-link" data-view="intake"><i data-lucide="wand-sparkles" class="w-4 h-4"></i>Change Designer</button>
+        <button class="sidebar-link" data-view="portfolio"><i data-lucide="layers-3" class="w-4 h-4"></i>Portfolio</button>
+        <button class="sidebar-link" data-view="toolkit"><i data-lucide="layout-template" class="w-4 h-4"></i>Templates</button>
+        <button class="sidebar-link" data-view="manager"><i data-lucide="users" class="w-4 h-4"></i>Manager Hub</button>
+        <button class="sidebar-link" data-view="analytics"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Adoption Intelligence</button>
       </nav>
 
-      <div class='mt-auto pt-6 border-t border-slate-100'>
-        <div class='card p-4 bg-slate-50 border-slate-100 rounded-2xl'>
-          <div class='flex items-center gap-3'>
-            <div class='w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold'>AT</div>
+      <div class="mt-auto pt-6 border-t border-gray-100">
+        <div class="card p-4 bg-gray-50 border-gray-100 rounded-2xl">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-ebay-blue text-white flex items-center justify-center font-bold">AT</div>
             <div>
-              <div class='font-bold'>Alex Thompson</div>
-              <div class='text-xs text-slate-500'>Change Lead</div>
+              <div class="font-bold">Alex Thompson</div>
+              <div class="text-xs text-gray-500">Change Lead</div>
             </div>
           </div>
         </div>
       </div>
     </aside>
 
-    <main class='flex-1 flex flex-col min-w-0'>
-      <header class='h-20 glass border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-20'>
+    <!-- Main -->
+    <main class="flex-1 flex flex-col min-w-0">
+      <header class="h-20 glass border-b border-gray-200 px-8 flex items-center justify-between sticky top-0 z-20">
         <div>
-          <div class='text-xl font-extrabold tracking-tight'>GCX Change Platform</div>
-          <div class='text-sm text-slate-500' id='role-subtitle'>Portfolio view and decision support for leaders</div>
+          <div class="text-xl font-black tracking-tight">GCX Change Enablement Portal</div>
+          <div class="text-sm text-gray-500" id="role-subtitle">Portfolio view and decision support for leaders</div>
         </div>
 
-        <div class='flex items-center gap-3'>
-          <div class='flex rounded-full bg-slate-100 p-1 border border-slate-200'>
-            <button class='nav-pill active px-4 py-2 text-sm font-semibold rounded-full' data-role='Leader'>Leader</button>
-            <button class='nav-pill px-4 py-2 text-sm font-semibold rounded-full' data-role='Manager'>Manager</button>
-            <button class='nav-pill px-4 py-2 text-sm font-semibold rounded-full' data-role='Change Lead'>Change Lead</button>
+        <div class="flex items-center gap-3">
+          <div class="flex rounded-full bg-gray-100 p-1 border border-gray-200">
+            <button class="nav-pill active px-4 py-2 text-sm font-semibold rounded-full" data-role="Leader">Leader</button>
+            <button class="nav-pill px-4 py-2 text-sm font-semibold rounded-full" data-role="Manager">Manager</button>
+            <button class="nav-pill px-4 py-2 text-sm font-semibold rounded-full" data-role="Change Lead">Change Lead</button>
           </div>
-          <button class='w-11 h-11 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-indigo-600'>
-            <i data-lucide='bell' class='w-5 h-5'></i>
+          <button class="w-11 h-11 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-ebay-blue">
+            <i data-lucide="bell" class="w-5 h-5"></i>
           </button>
-          <button class='w-11 h-11 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-indigo-600'>
-            <i data-lucide='help-circle' class='w-5 h-5'></i>
+          <button class="w-11 h-11 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:text-ebay-blue">
+            <i data-lucide="help-circle" class="w-5 h-5"></i>
           </button>
         </div>
       </header>
 
-      <div class='flex-1 overflow-y-auto p-8 lg:p-10'>
-        <!-- Dashboard -->
-        <section id='view-dashboard' class='space-y-8'>
-          <div class='flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4'>
+      <div class="flex-1 overflow-y-auto p-8 lg:p-10">
+
+        <!-- DASHBOARD -->
+        <section id="view-dashboard" class="space-y-8">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
             <div>
-              <h1 class='text-4xl font-black tracking-tight'>Welcome back, Alex</h1>
-              <p class='mt-2 text-slate-500'>Here is what is happening across the GCX change portfolio today.</p>
+              <h1 class="text-4xl font-black tracking-tight">Welcome back, Alex</h1>
+              <p class="mt-2 text-gray-500">Here is what needs attention across GCX change today.</p>
             </div>
-            <div class='flex gap-3'>
-              <button class='px-4 py-3 rounded-2xl border border-slate-200 bg-white font-semibold text-sm flex items-center gap-2'><i data-lucide='calendar' class='w-4 h-4'></i> Last 90 Days</button>
-              <button class='px-5 py-3 rounded-2xl bg-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-200 flex items-center gap-2'><i data-lucide='download' class='w-4 h-4'></i> Generate Report</button>
+            <div class="flex gap-3">
+              <button class="px-4 py-3 rounded-2xl border border-gray-200 bg-white font-semibold text-sm flex items-center gap-2">
+                <i data-lucide="calendar" class="w-4 h-4"></i> Last 90 Days
+              </button>
+              <button class="px-5 py-3 rounded-2xl bg-ebay-blue text-white font-semibold text-sm shadow-lg shadow-blue-100 flex items-center gap-2" onclick="openView('intake')">
+                <i data-lucide="plus" class="w-4 h-4"></i> Start Change Designer
+              </button>
             </div>
           </div>
 
-          <div class='grid md:grid-cols-2 xl:grid-cols-4 gap-5'>
-            <div class='metric p-6'>
-              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>Active Changes</span><i data-lucide='layers-3' class='w-5 h-5 text-indigo-500'></i></div>
+          <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+            <div class="metric p-6">
+              <div class="flex items-center justify-between mb-4"><span class="text-gray-500 font-medium">Active Changes</span><i data-lucide="layers-3" class="w-5 h-5 text-ebay-blue"></i></div>
               <h3>24</h3>
-              <div class='mt-3 text-sm text-emerald-600 font-semibold'>↑ 12% vs last 90 days</div>
+              <div class="mt-3 text-sm text-ebay-green font-bold">↑ 12% vs last 90 days</div>
             </div>
-            <div class='metric p-6'>
-              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>Adoption Rate</span><i data-lucide='trending-up' class='w-5 h-5 text-emerald-500'></i></div>
-              <h3 class='text-emerald-600'>92%</h3>
-              <div class='mt-3 text-sm text-emerald-600 font-semibold'>Healthy</div>
+            <div class="metric p-6">
+              <div class="flex items-center justify-between mb-4"><span class="text-gray-500 font-medium">Adoption Health</span><i data-lucide="trending-up" class="w-5 h-5 text-ebay-green"></i></div>
+              <h3 class="text-ebay-green">82%</h3>
+              <div class="mt-3 text-sm text-ebay-green font-bold">Stable, monitor Amber areas</div>
             </div>
-            <div class='metric p-6'>
-              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>Risk Areas</span><i data-lucide='alert-circle' class='w-5 h-5 text-rose-500'></i></div>
-              <h3 class='text-rose-500'>3</h3>
-              <div class='mt-3 text-sm text-rose-500 font-semibold'>High attention</div>
+            <div class="metric p-6">
+              <div class="flex items-center justify-between mb-4"><span class="text-gray-500 font-medium">Saturation Risks</span><i data-lucide="alert-circle" class="w-5 h-5 text-ebay-red"></i></div>
+              <h3 class="text-ebay-red">3</h3>
+              <div class="mt-3 text-sm text-ebay-red font-bold">Leader decision needed</div>
             </div>
-            <div class='metric p-6'>
-              <div class='flex items-center justify-between mb-4'><span class='text-slate-500 font-medium'>New Requests</span><i data-lucide='clock-3' class='w-5 h-5 text-blue-500'></i></div>
+            <div class="metric p-6">
+              <div class="flex items-center justify-between mb-4"><span class="text-gray-500 font-medium">New Requests</span><i data-lucide="clock-3" class="w-5 h-5 text-ebay-blue"></i></div>
               <h3>7</h3>
-              <div class='mt-3 text-sm text-blue-500 font-semibold'>Awaiting intake</div>
+              <div class="mt-3 text-sm text-ebay-blue font-bold">Awaiting tiering</div>
             </div>
           </div>
 
-          <div class='grid xl:grid-cols-3 gap-5'>
-            <div class='xl:col-span-2 card p-6'>
-              <div class='flex items-center justify-between mb-6'>
+          <div class="grid xl:grid-cols-3 gap-5">
+            <div class="xl:col-span-2 card p-6">
+              <div class="flex items-start justify-between mb-6 gap-4">
                 <div>
-                  <h2 class='text-xl font-extrabold tracking-tight'>Change Calendar and Saturation Timeline</h2>
-                  <p class='text-sm text-slate-500 mt-1'>A quick view of when change load peaks across the year.</p>
+                  <h2 class="text-xl font-black tracking-tight">Change Calendar & Audience Load</h2>
+                  <p class="text-sm text-gray-500 mt-1">Saturation is a leadership decision, not a communications problem.</p>
                 </div>
-                <span class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'><i data-lucide='calendar-days' class='w-3.5 h-3.5'></i> Calendar view</span>
+                <span class="badge badge-blue"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> Calendar view</span>
               </div>
 
-              <div class='grid md:grid-cols-6 gap-3'>
-                <div class='rounded-2xl border border-emerald-100 bg-emerald-50 p-4'>
-                  <div class='text-xs font-bold uppercase tracking-widest text-emerald-700'>Jan</div>
-                  <div class='mt-5 h-16 rounded-xl bg-emerald-200 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[20%] bg-emerald-500'></div></div>
-                  <div class='mt-3 text-sm font-semibold text-emerald-700'>Low</div>
+              <div class="grid md:grid-cols-6 gap-3">
+                <div class="rounded-2xl border border-green-100 bg-green-50 p-4">
+                  <div class="tiny-label text-green-700">Jan</div>
+                  <div class="mt-5 h-16 rounded-xl bg-green-100 relative overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-[20%] bg-ebay-green"></div></div>
+                  <div class="mt-3 text-sm font-bold text-green-700">Low</div>
                 </div>
-                <div class='rounded-2xl border border-amber-100 bg-amber-50 p-4'>
-                  <div class='text-xs font-bold uppercase tracking-widest text-amber-700'>Feb</div>
-                  <div class='mt-5 h-16 rounded-xl bg-amber-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[45%] bg-amber-400'></div></div>
-                  <div class='mt-3 text-sm font-semibold text-amber-700'>Watch</div>
+                <div class="rounded-2xl border border-yellow-100 bg-yellow-50 p-4">
+                  <div class="tiny-label text-yellow-700">Feb</div>
+                  <div class="mt-5 h-16 rounded-xl bg-yellow-100 relative overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-[45%] bg-ebay-yellow"></div></div>
+                  <div class="mt-3 text-sm font-bold text-yellow-700">Watch</div>
                 </div>
-                <div class='rounded-2xl border border-rose-100 bg-rose-50 p-4'>
-                  <div class='text-xs font-bold uppercase tracking-widest text-rose-700'>Mar</div>
-                  <div class='mt-5 h-16 rounded-xl bg-rose-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[85%] bg-rose-500'></div></div>
-                  <div class='mt-3 text-sm font-semibold text-rose-700'>Peak</div>
+                <div class="rounded-2xl border border-red-100 bg-red-50 p-4">
+                  <div class="tiny-label text-red-700">Mar</div>
+                  <div class="mt-5 h-16 rounded-xl bg-red-100 relative overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-[85%] bg-ebay-red"></div></div>
+                  <div class="mt-3 text-sm font-bold text-red-700">Peak</div>
                 </div>
-                <div class='rounded-2xl border border-amber-100 bg-amber-50 p-4'>
-                  <div class='text-xs font-bold uppercase tracking-widest text-amber-700'>Apr</div>
-                  <div class='mt-5 h-16 rounded-xl bg-amber-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[40%] bg-amber-400'></div></div>
-                  <div class='mt-3 text-sm font-semibold text-amber-700'>Watch</div>
+                <div class="rounded-2xl border border-yellow-100 bg-yellow-50 p-4">
+                  <div class="tiny-label text-yellow-700">Apr</div>
+                  <div class="mt-5 h-16 rounded-xl bg-yellow-100 relative overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-[40%] bg-ebay-yellow"></div></div>
+                  <div class="mt-3 text-sm font-bold text-yellow-700">Watch</div>
                 </div>
-                <div class='rounded-2xl border border-rose-100 bg-rose-50 p-4'>
-                  <div class='text-xs font-bold uppercase tracking-widest text-rose-700'>May</div>
-                  <div class='mt-5 h-16 rounded-xl bg-rose-100 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[75%] bg-rose-500'></div></div>
-                  <div class='mt-3 text-sm font-semibold text-rose-700'>Peak</div>
+                <div class="rounded-2xl border border-red-100 bg-red-50 p-4">
+                  <div class="tiny-label text-red-700">May</div>
+                  <div class="mt-5 h-16 rounded-xl bg-red-100 relative overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-[75%] bg-ebay-red"></div></div>
+                  <div class="mt-3 text-sm font-bold text-red-700">Peak</div>
                 </div>
-                <div class='rounded-2xl border border-emerald-100 bg-emerald-50 p-4'>
-                  <div class='text-xs font-bold uppercase tracking-widest text-emerald-700'>Jun</div>
-                  <div class='mt-5 h-16 rounded-xl bg-emerald-200 relative overflow-hidden'><div class='absolute bottom-0 left-0 right-0 h-[25%] bg-emerald-500'></div></div>
-                  <div class='mt-3 text-sm font-semibold text-emerald-700'>Low</div>
+                <div class="rounded-2xl border border-green-100 bg-green-50 p-4">
+                  <div class="tiny-label text-green-700">Jun</div>
+                  <div class="mt-5 h-16 rounded-xl bg-green-100 relative overflow-hidden"><div class="absolute bottom-0 left-0 right-0 h-[25%] bg-ebay-green"></div></div>
+                  <div class="mt-3 text-sm font-bold text-green-700">Low</div>
                 </div>
               </div>
 
-              <div class='mt-5 text-sm text-slate-500 leading-6'>March and May are the highest saturation windows in the current calendar. These are the months to protect with sequencing and stronger change control.</div>
+              <div class="mt-5 text-sm text-gray-500 leading-6">March and May are the highest saturation windows in the current calendar. Use Audience Load Check before locking new launch dates.</div>
 
-              <div class='mt-5 flex flex-wrap gap-3'>
-                <a href='https://sites.google.com/ebay.com/gsrchangecalendar/change-impact-calendar' target='_blank' class='inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-600 text-white font-semibold text-sm shadow-lg shadow-indigo-200'>
-                  <i data-lucide='external-link' class='w-4 h-4'></i> Open live change calendar
+              <div class="mt-5 flex flex-wrap gap-3">
+                <a href="https://sites.google.com/ebay.com/gsrchangecalendar/change-impact-calendar" target="_blank" class="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-ebay-blue text-white font-semibold text-sm shadow-lg shadow-blue-100">
+                  <i data-lucide="external-link" class="w-4 h-4"></i> Open live calendar
                 </a>
-                <span class='inline-flex items-center gap-2 px-4 py-3 rounded-2xl border border-slate-200 bg-white text-sm font-semibold text-slate-600'>
-                  <i data-lucide='shield-check' class='w-4 h-4 text-emerald-500'></i> Source of truth stays in Jira / Google Site
-                </span>
+                <button onclick="openView('toolkit'); filterTemplates('risk')" class="inline-flex items-center gap-2 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-gray-600">
+                  <i data-lucide="alert-triangle" class="w-4 h-4 text-ebay-red"></i> Open risk templates
+                </button>
               </div>
             </div>
 
-            <div class='card p-6 bg-slate-950 text-white border-slate-900 overflow-hidden relative'>
-              <div class='absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-fuchsia-600/10'></div>
-              <div class='relative'>
-                <div class='flex items-center gap-2 mb-5'><i data-lucide='sparkles' class='w-5 h-5 text-indigo-300'></i><h2 class='text-xl font-extrabold'>AI Insights</h2></div>
-                <div class='space-y-3'>
-                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>
-                    <div class='font-bold text-rose-300 mb-1'>Saturation Alert</div>
-                    <div class='text-sm text-slate-200'>Prepare Our People carries the heaviest load. Avoid adding new launches into March and May if possible.</div>
+            <div class="card p-6 bg-gray-950 text-white border-gray-900 overflow-hidden relative">
+              <div class="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-green-500/10"></div>
+              <div class="relative">
+                <div class="flex items-center gap-2 mb-5"><i data-lucide="sparkles" class="w-5 h-5 text-blue-300"></i><h2 class="text-xl font-black">AI Change Copilot</h2></div>
+                <div class="space-y-3">
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div class="font-bold text-red-300 mb-1">Saturation alert</div>
+                    <div class="text-sm text-gray-200">Prepare Our People carries the heaviest load. Avoid adding new launches into March and May if possible.</div>
                   </div>
-                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>
-                    <div class='font-bold text-emerald-300 mb-1'>Portfolio Opportunity</div>
-                    <div class='text-sm text-slate-200'>eBay Live and Reimagine Service / AI both need manager packs and role-based comms.</div>
+                  <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div class="font-bold text-green-300 mb-1">Adoption opportunity</div>
+                    <div class="text-sm text-gray-200">eBay Live and Reimagine Service / AI both need Manager Action Cards and role-based reinforcement.</div>
                   </div>
                 </div>
-                <button class='mt-6 w-full rounded-2xl border border-indigo-400/40 bg-indigo-500/10 py-3 font-semibold text-indigo-200 hover:bg-indigo-500/20 transition'>Run Full Portfolio Scan</button>
+                <button onclick="openView('analytics')" class="mt-6 w-full rounded-2xl border border-blue-400/40 bg-blue-500/10 py-3 font-semibold text-blue-200 hover:bg-blue-500/20 transition">Open Adoption Intelligence</button>
               </div>
             </div>
           </div>
 
-          <div class='grid xl:grid-cols-2 gap-5'>
-            <div class='card p-6'>
-              <div class='flex items-center justify-between mb-4'>
-                <div>
-                  <h2 class='text-xl font-extrabold tracking-tight'>Hub and Spoke Model</h2>
-                  <p class='text-sm text-slate-500 mt-1'>PMO feeds the hub, the hub sets tier and standards, and the spokes deliver locally.</p>
-                </div>
-                <span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Operating model</span>
-              </div>
-              <div class='grid md:grid-cols-3 gap-3'>
-                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                  <div class='font-bold mb-2'>Hub</div>
-                  <div class='text-sm text-slate-600 leading-6'>Change team owns standards, tiering, tools, and measurement.</div>
-                </div>
-                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                  <div class='font-bold mb-2'>Spokes</div>
-                  <div class='text-sm text-slate-600 leading-6'>PMO, product, ops, and leaders execute within the model.</div>
-                </div>
-                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                  <div class='font-bold mb-2'>Bronze</div>
-                  <div class='text-sm text-slate-600 leading-6'>Self-service in the portal with templates, FAQs, and light touch support.</div>
-                </div>
+          <div class="grid xl:grid-cols-2 gap-5">
+            <div class="card p-6">
+              <h2 class="text-xl font-black tracking-tight">Leader Quick Guide</h2>
+              <p class="text-sm text-gray-500 mt-1 mb-5">Five decisions that make change stick.</p>
+              <div class="space-y-3">
+                <div class="flex gap-3 p-4 rounded-2xl bg-blue-50 border border-blue-100"><span class="badge badge-blue">1</span><div><b>Support level</b><div class="text-sm text-gray-600">Is this Gold, Silver, or Bronze?</div></div></div>
+                <div class="flex gap-3 p-4 rounded-2xl bg-yellow-50 border border-yellow-100"><span class="badge badge-yellow">2</span><div><b>Timing</b><div class="text-sm text-gray-600">Can the audience absorb the change now?</div></div></div>
+                <div class="flex gap-3 p-4 rounded-2xl bg-yellow-50 border border-yellow-100"><span class="badge badge-yellow">3</span><div><b>Readiness</b><div class="text-sm text-gray-600">Are managers and teams ready?</div></div></div>
+                <div class="flex gap-3 p-4 rounded-2xl bg-green-50 border border-green-100"><span class="badge badge-green">4</span><div><b>Reinforcement</b><div class="text-sm text-gray-600">What should managers say and do?</div></div></div>
+                <div class="flex gap-3 p-4 rounded-2xl bg-green-50 border border-green-100"><span class="badge badge-green">5</span><div><b>Adoption</b><div class="text-sm text-gray-600">Are people working differently?</div></div></div>
               </div>
             </div>
 
-            <div class='card p-6'>
-              <div class='flex items-center justify-between mb-4'>
-                <div>
-                  <h2 class='text-xl font-extrabold tracking-tight'>Support Tier Guide</h2>
-                  <p class='text-sm text-slate-500 mt-1'>What leaders get at each support level.</p>
-                </div>
-                <span class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'>Gold / Silver / Bronze</span>
-              </div>
-              <div class='grid md:grid-cols-3 gap-3'>
-                <div class='rounded-2xl border border-amber-200 bg-amber-50 p-4'>
-                  <div class='font-extrabold text-amber-800 mb-2'>Gold</div>
-                  <ul class='text-sm text-amber-900/90 space-y-1 leading-6 list-disc pl-5'>
-                    <li>Full change plan</li><li>Sponsor coaching</li><li>Manager huddles</li><li>Learning and reinforcement</li>
+            <div class="card p-6">
+              <h2 class="text-xl font-black tracking-tight">Gold / Silver / Bronze</h2>
+              <p class="text-sm text-gray-500 mt-1 mb-5">Right-size change support based on impact, complexity, timing, and adoption risk.</p>
+              <div class="grid md:grid-cols-3 gap-3">
+                <div class="rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
+                  <div class="font-black text-yellow-800 mb-2">Gold</div>
+                  <ul class="text-sm text-yellow-900/90 space-y-1 leading-6 list-disc pl-5">
+                    <li>Full orchestration</li><li>Leader cascade</li><li>Manager action pack</li><li>Adoption scorecard</li>
                   </ul>
                 </div>
-                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                  <div class='font-extrabold text-slate-800 mb-2'>Silver</div>
-                  <ul class='text-sm text-slate-700 space-y-1 leading-6 list-disc pl-5'>
-                    <li>Guided support</li><li>Targeted comms</li><li>Manager pack</li><li>Office hours</li>
+                <div class="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                  <div class="font-black text-gray-800 mb-2">Silver</div>
+                  <ul class="text-sm text-gray-700 space-y-1 leading-6 list-disc pl-5">
+                    <li>Guided support</li><li>Core templates</li><li>Readiness check</li><li>Basic adoption measures</li>
                   </ul>
                 </div>
-                <div class='rounded-2xl border border-orange-200 bg-orange-50 p-4'>
-                  <div class='font-extrabold text-orange-800 mb-2'>Bronze</div>
-                  <ul class='text-sm text-orange-900/90 space-y-1 leading-6 list-disc pl-5'>
-                    <li>One-stop portal</li><li>Templates and FAQs</li><li>Auto-generated summary</li><li>Light touch support</li>
+                <div class="rounded-2xl border border-blue-200 bg-blue-50 p-4">
+                  <div class="font-black text-blue-800 mb-2">Bronze</div>
+                  <ul class="text-sm text-blue-900/90 space-y-1 leading-6 list-disc pl-5">
+                    <li>Self-service</li><li>Message builder</li><li>FAQ builder</li><li>Basic success measure</li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-          <div class='card p-6'>
-            <div class='flex items-center justify-between mb-4'>
+        <!-- CHANGE DESIGNER -->
+        <section id="view-intake" class="hidden max-w-6xl mx-auto space-y-8">
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <h1 class="text-4xl font-black tracking-tight">Change Designer</h1>
+              <p class="text-gray-500 mt-2">Create a Change Snapshot, Change Impact Canvas, tier recommendation, and core template path.</p>
+            </div>
+            <div id="step-label" class="badge badge-blue">Step 1 of 5</div>
+          </div>
+
+          <div class="card p-5 bg-blue-50 border-blue-100">
+            <div class="font-bold text-blue-900 mb-1">How this works</div>
+            <div class="text-sm text-blue-800 leading-6">
+              Start with the human impact, not the project name. The portal recommends a support tier and templates based on audience impact, behavior shift, operational risk, manager dependency, and saturation.
+            </div>
+          </div>
+
+          <div class="card p-6 lg:p-8">
+            <div class="flex items-center gap-3 mb-8">
+              <div class="step-dot active" id="dot-1">1</div>
+              <div class="h-1 flex-1 rounded-full bg-gray-100"><div id="progress" class="h-1 rounded-full bg-ebay-blue" style="width:20%"></div></div>
+              <div class="step-dot" id="dot-2">2</div>
+              <div class="step-dot" id="dot-3">3</div>
+              <div class="step-dot" id="dot-4">4</div>
+              <div class="step-dot" id="dot-5">5</div>
+            </div>
+
+            <!-- Step 1: Change Snapshot -->
+            <div id="intake-step-1" class="space-y-5">
+              <div class="flex items-center gap-2 mb-2"><span class="badge badge-blue">Template 01</span><h2 class="text-2xl font-black">Change Snapshot</h2></div>
+              <div class="grid md:grid-cols-2 gap-5">
+                <div><label class="block text-sm font-semibold mb-2">Initiative name</label><input id="initiativeTitle" class="field" placeholder="e.g. eBay Live CS Fulfillment - Create-a-Package" /></div>
+                <div><label class="block text-sm font-semibold mb-2">Workstream / portfolio</label><input id="projectWorkstream" class="field" placeholder="e.g. eBay Live / Reimagine Service / Prepare Our People" /></div>
+                <div><label class="block text-sm font-semibold mb-2">Business owner / sponsor</label><input id="projectOwner" class="field" placeholder="e.g. Service Ops Leader" /></div>
+                <div><label class="block text-sm font-semibold mb-2">PMO source</label><input id="pmoSource" class="field" placeholder="e.g. PMO assigned from quarterly roadmap" /></div>
+              </div>
+              <div><label class="block text-sm font-semibold mb-2">What is changing?</label><textarea id="whatChanging" class="field min-h-28" placeholder="Describe the change in one or two plain-language sentences."></textarea></div>
+              <div><label class="block text-sm font-semibold mb-2">Why now?</label><textarea id="whyNow" class="field min-h-24" placeholder="Business, customer, teammate, operational, or compliance reason."></textarea></div>
+              <div><label class="block text-sm font-semibold mb-2">What is not changing?</label><textarea id="notChanging" class="field min-h-20" placeholder="Clarify what remains stable to reduce noise."></textarea></div>
+            </div>
+
+            <!-- Step 2: Change Impact Canvas -->
+            <div id="intake-step-2" class="space-y-5 hidden">
+              <div class="flex items-center gap-2 mb-2"><span class="badge badge-blue">Template 02</span><h2 class="text-2xl font-black">Change Impact Canvas</h2></div>
+              <div class="grid md:grid-cols-2 gap-5">
+                <div><label class="block text-sm font-semibold mb-2">Impacted audience</label><textarea id="impactedAudience" class="field min-h-28" placeholder="Teams, roles, regions, partner groups, leaders."></textarea></div>
+                <div><label class="block text-sm font-semibold mb-2">What changes for them?</label><textarea id="impactDescription" class="field min-h-28" placeholder="Process, role, tool, workflow, decision-making, expectations."></textarea></div>
+              </div>
+              <div class="grid md:grid-cols-2 gap-5">
+                <div><label class="block text-sm font-semibold mb-2">Today they do...</label><textarea id="beforeText" class="field min-h-32" placeholder="Current behavior, workaround, habit, or decision path."></textarea></div>
+                <div><label class="block text-sm font-semibold mb-2">Future they need to do...</label><textarea id="afterText" class="field min-h-32" placeholder="Observable behavior after launch."></textarea></div>
+              </div>
+              <div class="grid md:grid-cols-2 gap-5">
+                <div><label class="block text-sm font-semibold mb-2">Expected friction</label><textarea id="frictionText" class="field min-h-24" placeholder="What may feel unclear, difficult, annoying, risky, or time-consuming?"></textarea></div>
+                <div><label class="block text-sm font-semibold mb-2">Manager role</label><textarea id="managerRoleText" class="field min-h-24" placeholder="What do managers need to say, do, watch, escalate, or recognize?"></textarea></div>
+              </div>
+            </div>
+
+            <!-- Step 3: Support Level Selector -->
+            <div id="intake-step-3" class="space-y-5 hidden">
+              <div class="flex items-center gap-2 mb-2"><span class="badge badge-blue">Template 03</span><h2 class="text-2xl font-black">Support Level Selector</h2></div>
+              <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Audience impact</label>
+                  <select id="audienceImpact" class="field score-field">
+                    <option value="1">Low = 1</option><option value="2" selected>Medium = 2</option><option value="3">High = 3</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Behavior shift</label>
+                  <select id="behaviorShift" class="field score-field">
+                    <option value="1">Awareness only = 1</option><option value="2" selected>Workflow change = 2</option><option value="3">Role or process shift = 3</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Operational risk</label>
+                  <select id="operationalRisk" class="field score-field">
+                    <option value="1">Low = 1</option><option value="2" selected>Moderate = 2</option><option value="3">High customer / service risk = 3</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Manager dependency</label>
+                  <select id="managerDependency" class="field score-field">
+                    <option value="1">Minimal = 1</option><option value="2" selected>Some reinforcement = 2</option><option value="3">Managers critical = 3</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Saturation timing</label>
+                  <select id="saturationTiming" class="field score-field">
+                    <option value="1">Low-change period = 1</option><option value="2" selected>Moderate overlap = 2</option><option value="3">Peak window = 3</option>
+                  </select>
+                </div>
+                <div class="card p-5 bg-gray-50 border-gray-100">
+                  <div class="tiny-label">Current recommendation</div>
+                  <div id="liveTier" class="text-3xl font-black mt-2">Silver</div>
+                  <div id="liveScore" class="text-sm text-gray-500 mt-1">Score: 10</div>
+                </div>
+              </div>
+              <div class="grid md:grid-cols-3 gap-3">
+                <div class="rounded-2xl border border-yellow-200 bg-yellow-50 p-4"><b class="text-yellow-800">Gold</b><p class="text-sm text-yellow-900/90 mt-1">12–15: full orchestration.</p></div>
+                <div class="rounded-2xl border border-gray-200 bg-gray-50 p-4"><b class="text-gray-800">Silver</b><p class="text-sm text-gray-700 mt-1">8–11: guided support.</p></div>
+                <div class="rounded-2xl border border-blue-200 bg-blue-50 p-4"><b class="text-blue-800">Bronze</b><p class="text-sm text-blue-900/90 mt-1">5–7: self-service.</p></div>
+              </div>
+            </div>
+
+            <!-- Step 4: Audience Load / Launch Confidence -->
+            <div id="intake-step-4" class="space-y-5 hidden">
+              <div class="flex items-center gap-2 mb-2"><span class="badge badge-yellow">Templates 06–07</span><h2 class="text-2xl font-black">Audience Load & Launch Confidence</h2></div>
+              <div class="grid md:grid-cols-2 gap-5">
+                <div><label class="block text-sm font-semibold mb-2">Proposed go-live date</label><input id="goLiveDate" type="date" class="field" /></div>
+                <div><label class="block text-sm font-semibold mb-2">Other changes landing</label><input id="otherChanges" class="field" placeholder="List overlapping initiatives" /></div>
+              </div>
+              <div class="card p-5 bg-red-50 border-red-100 hidden" id="calendarWarning">
+                <div class="font-bold text-red-900 mb-1">Calendar warning</div>
+                <div class="text-sm text-red-800">This lands in a known saturation window. Consider sequencing, reducing scope, moving timing, or adding support.</div>
+              </div>
+              <div class="grid md:grid-cols-3 gap-3">
+                <button class="metric-btn field text-left" data-metric="Usage">Usage</button>
+                <button class="metric-btn field text-left" data-metric="Behavioral compliance">Behavioral compliance</button>
+                <button class="metric-btn field text-left" data-metric="CSAT / AHT">CSAT / AHT</button>
+              </div>
+              <div><label class="block text-sm font-semibold mb-2">Leader decision required</label><textarea id="leaderDecision" class="field min-h-24" placeholder="Timing / scope / support / sequencing / resourcing."></textarea></div>
+            </div>
+
+            <!-- Step 5: Generate -->
+            <div id="intake-step-5" class="space-y-5 hidden">
+              <div class="flex items-center gap-2 mb-2"><span class="badge badge-green">Template Path</span><h2 class="text-2xl font-black">Recommended Toolkit Path</h2></div>
+              <p class="text-gray-500">Generate a summary that can be used for intake review, leader discussion, and manager enablement planning.</p>
+              <div class="grid md:grid-cols-2 gap-5">
+                <div class="card p-5 bg-blue-50 border-blue-100">
+                  <div class="font-bold text-blue-900 mb-2">Core outputs generated</div>
+                  <ul class="text-sm text-blue-800 leading-7 list-disc pl-5">
+                    <li>Change Snapshot</li>
+                    <li>Change Impact Canvas</li>
+                    <li>Support Level recommendation</li>
+                    <li>Manager role and reinforcement need</li>
+                    <li>Adoption signals</li>
+                  </ul>
+                </div>
+                <div class="card p-5 bg-green-50 border-green-100">
+                  <div class="font-bold text-green-900 mb-2">Next best templates</div>
+                  <div id="nextTemplates" class="text-sm text-green-800 leading-7"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
+              <button id="backBtn" class="px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold disabled:opacity-40">Back</button>
+              <div class="flex items-center gap-3">
+                <button id="aiFillBtn" class="px-5 py-3 rounded-2xl border border-blue-200 bg-blue-50 text-blue-700 font-semibold">Auto-fill demo</button>
+                <button id="nextBtn" class="px-6 py-3 rounded-2xl bg-ebay-blue text-white font-semibold shadow-lg shadow-blue-100">Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="summaryCard" class="hidden card p-6 lg:p-8">
+            <div class="flex items-center justify-between flex-wrap gap-4 mb-5">
               <div>
-                <h2 class='text-xl font-extrabold tracking-tight'>Active Initiatives</h2>
-                <p class='text-sm text-slate-500 mt-1'>A view of the most visible GCX changes.</p>
+                <h2 class="text-2xl font-black tracking-tight">Change Summary Dashboard</h2>
+                <p class="text-sm text-gray-500 mt-1">Use this as the starting point for leader review and template completion.</p>
               </div>
-              <button class='px-4 py-2 rounded-xl border border-slate-200 bg-white text-sm font-semibold'>View All Initiatives</button>
+              <span id="summaryTierBadge" class="badge badge-yellow">Silver</span>
             </div>
-            <div class='overflow-hidden rounded-2xl border border-slate-200'>
-              <table class='w-full text-left'>
-                <thead class='bg-slate-50 text-slate-500 text-xs uppercase tracking-widest'>
+            <div class="grid md:grid-cols-3 gap-4 mb-5">
+              <div class="card p-4 bg-gray-50 border-gray-100"><div class="tiny-label">Tier</div><div id="summaryTier" class="text-2xl font-black">Silver</div></div>
+              <div class="card p-4 bg-gray-50 border-gray-100"><div class="tiny-label">Impact score</div><div id="summaryImpact" class="text-2xl font-black">10</div></div>
+              <div class="card p-4 bg-gray-50 border-gray-100"><div class="tiny-label">Manager effort</div><div id="summaryManager" class="text-2xl font-black">Medium</div></div>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-5">
+              <div class="card p-5 bg-blue-50 border-blue-100">
+                <div class="text-sm text-blue-900 font-bold mb-2">Recommended templates</div>
+                <div id="summaryInterventions" class="text-sm text-blue-800 leading-7"></div>
+              </div>
+              <div class="card p-5 bg-gray-950 text-white border-gray-900">
+                <div class="text-sm text-white/80 font-bold mb-2">AI draft prompt</div>
+                <div id="summaryPrompt" class="text-sm text-gray-200 leading-6"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PORTFOLIO -->
+        <section id="view-portfolio" class="hidden space-y-8">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+            <div>
+              <h1 class="text-4xl font-black tracking-tight">Portfolio</h1>
+              <p class="text-gray-500 mt-2">A working view of support tier, saturation, readiness, and adoption health.</p>
+            </div>
+            <button class="px-5 py-3 rounded-2xl bg-ebay-blue text-white font-semibold text-sm shadow-lg shadow-blue-100" onclick="openView('intake')">Create new change</button>
+          </div>
+
+          <div class="grid lg:grid-cols-4 gap-5">
+            <div class="metric p-6"><div class="text-sm text-gray-500">Gold</div><h3 class="text-ebay-yellow mt-2">5</h3></div>
+            <div class="metric p-6"><div class="text-sm text-gray-500">Silver</div><h3 class="mt-2">12</h3></div>
+            <div class="metric p-6"><div class="text-sm text-gray-500">Bronze</div><h3 class="text-ebay-blue mt-2">7</h3></div>
+            <div class="metric p-6"><div class="text-sm text-gray-500">Red / Amber load</div><h3 class="text-ebay-red mt-2">3</h3></div>
+          </div>
+
+          <div class="card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-black tracking-tight">Active Initiatives</h2>
+                <p class="text-sm text-gray-500 mt-1">Focus leaders on decisions, not status.</p>
+              </div>
+              <span class="badge badge-blue">Portfolio health</span>
+            </div>
+            <div class="overflow-hidden rounded-2xl border border-gray-200">
+              <table class="w-full text-left">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-widest">
                   <tr>
-                    <th class='px-5 py-4'>Initiative</th>
-                    <th class='px-5 py-4'>Owner</th>
-                    <th class='px-5 py-4'>Audience</th>
-                    <th class='px-5 py-4'>Health</th>
-                    <th class='px-5 py-4'>Tier</th>
-                    <th class='px-5 py-4'>Timeline</th>
-                    <th class='px-5 py-4'>Status</th>
+                    <th class="px-5 py-4">Initiative</th>
+                    <th class="px-5 py-4">Owner</th>
+                    <th class="px-5 py-4">Audience</th>
+                    <th class="px-5 py-4">Tier</th>
+                    <th class="px-5 py-4">Saturation</th>
+                    <th class="px-5 py-4">Adoption</th>
+                    <th class="px-5 py-4">Decision</th>
                   </tr>
                 </thead>
-                <tbody class='divide-y divide-slate-100 text-sm'>
-                  <tr>
-                    <td class='px-5 py-4'><div class='font-bold'>Prepare Our People</div><div class='text-xs text-indigo-600 mt-1'>Reskill Our People</div></td>
-                    <td class='px-5 py-4'>GCX Change Team</td>
-                    <td class='px-5 py-4'>1,500</td>
-                    <td class='px-5 py-4'>72%</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Gold</span></td>
-                    <td class='px-5 py-4'>H1 2025</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
-                  </tr>
-                  <tr>
-                    <td class='px-5 py-4'><div class='font-bold'>Service Management Portfolio: Virtualised Support SME Deprecation</div><div class='text-xs text-emerald-600 mt-1'>Reimagine Service / AI</div></td>
-                    <td class='px-5 py-4'>Service Ops</td>
-                    <td class='px-5 py-4'>850</td>
-                    <td class='px-5 py-4'>61%</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Silver</span></td>
-                    <td class='px-5 py-4'>H2 2025</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
-                  </tr>
-                  <tr>
-                    <td class='px-5 py-4'><div class='font-bold'>eBay Live Streaming on Android</div><div class='text-xs text-indigo-600 mt-1'>eBay Live</div></td>
-                    <td class='px-5 py-4'>Product / CX</td>
-                    <td class='px-5 py-4'>420</td>
-                    <td class='px-5 py-4'>88%</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Silver</span></td>
-                    <td class='px-5 py-4'>Q3 2025</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td>
-                  </tr>
-                  <tr>
-                    <td class='px-5 py-4'><div class='font-bold'>eBay Live CS Fulfillment (Live) - Create-a-Package</div><div class='text-xs text-indigo-600 mt-1'>eBay Live</div></td>
-                    <td class='px-5 py-4'>Operations</td>
-                    <td class='px-5 py-4'>510</td>
-                    <td class='px-5 py-4'>69%</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Gold</span></td>
-                    <td class='px-5 py-4'>Q3 2025</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
-                  </tr>
-                  <tr>
-                    <td class='px-5 py-4'><div class='font-bold'>eBay Live Returns Cancellation Policy</div><div class='text-xs text-emerald-600 mt-1'>eBay Live</div></td>
-                    <td class='px-5 py-4'>Policy / Trust</td>
-                    <td class='px-5 py-4'>290</td>
-                    <td class='px-5 py-4'>90%</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-orange-50 text-orange-700 border border-orange-100'>Bronze</span></td>
-                    <td class='px-5 py-4'>Q4 2025</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100'>Green</span></td>
-                  </tr>
-                  <tr>
-                    <td class='px-5 py-4'><div class='font-bold'>eBay Live APAC H1 Expansions</div><div class='text-xs text-indigo-600 mt-1'>eBay Live</div></td>
-                    <td class='px-5 py-4'>APAC Operations</td>
-                    <td class='px-5 py-4'>630</td>
-                    <td class='px-5 py-4'>74%</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-slate-100 text-slate-700 border border-slate-200'>Silver</span></td>
-                    <td class='px-5 py-4'>H1 2025</td>
-                    <td class='px-5 py-4'><span class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Amber</span></td>
-                  </tr>
-                </tbody>
+                <tbody class="divide-y divide-gray-100 text-sm" id="initiativeTable"></tbody>
               </table>
             </div>
           </div>
         </section>
 
-        <!-- Intake -->
-        <section id='view-intake' class='hidden max-w-6xl mx-auto space-y-8'>
-          <div class='flex items-end justify-between gap-4'>
+        <!-- TEMPLATES -->
+        <section id="view-toolkit" class="hidden max-w-7xl mx-auto space-y-8">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
             <div>
-              <h1 class='text-4xl font-black tracking-tight'>Strategic Change Designer</h1>
-              <p class='text-slate-500 mt-2'>Projects do not come in as open requests. They usually arrive through PMO assignment, then the change hub triages them into Gold, Silver, or Bronze support.</p>
+              <h1 class="text-4xl font-black tracking-tight">Template Library</h1>
+              <p class="text-gray-500 mt-2">Core templates from the GCX Change Enablement Toolkit, grouped by job to be done.</p>
             </div>
-            <div id='step-label' class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'>Step 1 of 4</div>
-          </div>
-
-          <div class='card p-5 bg-indigo-50 border-indigo-100'>
-            <div class='font-bold text-indigo-900 mb-1'>Why this intake exists</div>
-            <div class='text-sm text-indigo-800 leading-6'>
-              This is the front door for the change hub. It captures the project context, lets the team assign the right tier of support, and gives Bronze projects a self-service path inside the portal.
-              The goal is to make change visible, comparable, and measurable before it launches.
+            <div class="flex flex-wrap gap-2">
+              <button class="tab-btn active px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="all">All</button>
+              <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="project">Project Delivery</button>
+              <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="leadership">Leadership</button>
+              <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="risk">Risk / Readiness</button>
+              <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="adoption">Adoption</button>
             </div>
           </div>
 
-          <div class='card p-6 lg:p-8'>
-            <div class='flex items-center gap-3 mb-8'>
-              <div class='step-dot active' id='dot-1'>1</div>
-              <div class='h-1 flex-1 rounded-full bg-slate-100'><div id='progress' class='h-1 rounded-full bg-indigo-600' style='width:25%'></div></div>
-              <div class='step-dot' id='dot-2'>2</div>
-              <div class='step-dot' id='dot-3'>3</div>
-              <div class='step-dot' id='dot-4'>4</div>
-            </div>
-
-            <div id='intake-step-1' class='space-y-5'>
-              <div class='grid md:grid-cols-2 gap-5'>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Project name</label>
-                  <input id='initiativeTitle' class='field' placeholder='e.g. eBay Live CS Fulfillment (Live) - Create-a-Package' />
-                </div>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>PMO source</label>
-                  <input id='pmoSource' class='field' placeholder='e.g. PMO assigned from quarterly roadmap' />
-                </div>
-              </div>
-              <div class='grid md:grid-cols-2 gap-5'>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Sponsor / owner</label>
-                  <input id='projectOwner' class='field' placeholder='e.g. Service Ops Leader' />
-                </div>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Workstream</label>
-                  <input id='projectWorkstream' class='field' placeholder='e.g. eBay Live / Reimagine Service / Prepare Our People' />
-                </div>
-              </div>
-              <div>
-                <label class='block text-sm font-semibold mb-2'>Primary objective</label>
-                <textarea id='initiativeObjective' class='field min-h-32' placeholder='What business problem are we solving?'></textarea>
-              </div>
-            </div>
-
-            <div id='intake-step-2' class='space-y-5 hidden'>
-              <div class='grid xl:grid-cols-2 gap-5'>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Audience size</label>
-                  <input id='audienceSize' type='range' min='10' max='2000' value='150' class='w-full' />
-                  <div class='text-sm text-slate-500 mt-2'><span id='audienceValue'>150</span> impacted people</div>
-                </div>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Functional complexity</label>
-                  <div class='grid grid-cols-5 gap-3'>
-                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='1'>1</button>
-                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='2'>2</button>
-                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='3'>3</button>
-                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='4'>4</button>
-                    <button class='complexity-btn field py-3 text-center font-bold' data-complexity='5'>5</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class='grid md:grid-cols-3 gap-3'>
-                <div class='rounded-2xl border border-amber-200 bg-amber-50 p-4'>
-                  <div class='font-extrabold text-amber-800 mb-2'>Gold</div>
-                  <div class='text-sm text-amber-900/90 leading-6'>Full partnership for high impact work. Includes sponsor coaching, comms, manager huddles, learning, and adoption tracking.</div>
-                </div>
-                <div class='rounded-2xl border border-slate-200 bg-slate-50 p-4'>
-                  <div class='font-extrabold text-slate-800 mb-2'>Silver</div>
-                  <div class='text-sm text-slate-700 leading-6'>Guided support. The team provides the toolkit, targeted comms, manager pack, and office hours.</div>
-                </div>
-                <div class='rounded-2xl border border-orange-200 bg-orange-50 p-4'>
-                  <div class='font-extrabold text-orange-800 mb-2'>Bronze</div>
-                  <div class='text-sm text-orange-900/90 leading-6'>One-stop-shop support. Self-service templates, FAQs, and a light touch check-in only.</div>
-                </div>
-              </div>
-              <div class='text-sm text-slate-500 leading-6'>The change hub sets the final tier after reviewing the PMO assignment, business impact, and timing.</div>
-            </div>
-
-            <div id='intake-step-3' class='space-y-5 hidden'>
-              <div class='grid md:grid-cols-2 gap-5'>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Current behavior</label>
-                  <textarea id='beforeText' class='field min-h-40' placeholder='What do people do today?'></textarea>
-                </div>
-                <div>
-                  <label class='block text-sm font-semibold mb-2'>Desired behavior</label>
-                  <textarea id='afterText' class='field min-h-40' placeholder='What should they do differently?'></textarea>
-                </div>
-              </div>
-              <div class='grid md:grid-cols-2 xl:grid-cols-4 gap-3'>
-                <div class='card p-4 bg-indigo-50 border-indigo-100'>
-                  <div class='font-bold text-indigo-900 mb-1'>Comms</div>
-                  <div class='text-sm text-indigo-800'>Targeted messages for leaders and teams.</div>
-                </div>
-                <div class='card p-4 bg-indigo-50 border-indigo-100'>
-                  <div class='font-bold text-indigo-900 mb-1'>Managers</div>
-                  <div class='text-sm text-indigo-800'>Talking points, huddles, and reinforcement.</div>
-                </div>
-                <div class='card p-4 bg-indigo-50 border-indigo-100'>
-                  <div class='font-bold text-indigo-900 mb-1'>Learning</div>
-                  <div class='text-sm text-indigo-800'>Job aids and quick guides where needed.</div>
-                </div>
-                <div class='card p-4 bg-indigo-50 border-indigo-100'>
-                  <div class='font-bold text-indigo-900 mb-1'>Metrics</div>
-                  <div class='text-sm text-indigo-800'>What success looks like once live.</div>
-                </div>
-              </div>
-            </div>
-
-            <div id='intake-step-4' class='space-y-5 hidden'>
-              <div>
-                <label class='block text-sm font-semibold mb-2'>Go-live date</label>
-                <input id='goLiveDate' type='date' class='field' />
-              </div>
-              <div class='card p-5 bg-rose-50 border-rose-100 hidden' id='calendarWarning'>
-                <div class='font-bold text-rose-900 mb-1'>Calendar warning</div>
-                <div class='text-sm text-rose-800'>This lands in a known saturation window. Consider sequencing, rescoping, or shifting to protect the business.</div>
-              </div>
-              <div>
-                <label class='block text-sm font-semibold mb-2'>Success metrics</label>
-                <div class='grid md:grid-cols-3 gap-3'>
-                  <button class='metric-btn field text-left'>Usage</button>
-                  <button class='metric-btn field text-left'>Behavioral compliance</button>
-                  <button class='metric-btn field text-left'>CSAT / AHT</button>
-                </div>
-              </div>
-            </div>
-
-            <div class='flex items-center justify-between mt-8 pt-6 border-t border-slate-100'>
-              <button id='backBtn' class='px-5 py-3 rounded-2xl border border-slate-200 bg-white font-semibold disabled:opacity-40'>Back</button>
-              <div class='flex items-center gap-3'>
-                <button id='aiFillBtn' class='px-5 py-3 rounded-2xl border border-indigo-200 bg-indigo-50 text-indigo-700 font-semibold'>Auto-fill demo data</button>
-                <button id='nextBtn' class='px-6 py-3 rounded-2xl bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-200'>Continue</button>
-              </div>
-            </div>
+          <div class="grid lg:grid-cols-4 gap-5">
+            <button onclick="openTemplate('change-snapshot')" class="text-left card p-5 bg-blue-50 border-blue-100">
+              <span class="badge badge-blue mb-3">Start here</span>
+              <div class="font-black text-lg">Change Snapshot</div>
+              <p class="text-sm text-gray-600 mt-2">Define the change in human terms.</p>
+            </button>
+            <button onclick="openTemplate('impact-canvas')" class="text-left card p-5 bg-blue-50 border-blue-100">
+              <span class="badge badge-blue mb-3">New</span>
+              <div class="font-black text-lg">Change Impact Canvas</div>
+              <p class="text-sm text-gray-600 mt-2">Understand who is impacted and how.</p>
+            </button>
+            <button onclick="openTemplate('manager-action')" class="text-left card p-5 bg-green-50 border-green-100">
+              <span class="badge badge-green mb-3">Manager-led</span>
+              <div class="font-black text-lg">Manager Action Card</div>
+              <p class="text-sm text-gray-600 mt-2">Say / do / watch / escalate / recognize.</p>
+            </button>
+            <button onclick="openTemplate('adoption-scorecard')" class="text-left card p-5 bg-green-50 border-green-100">
+              <span class="badge badge-green mb-3">Measurement</span>
+              <div class="font-black text-lg">Adoption Intelligence</div>
+              <p class="text-sm text-gray-600 mt-2">Measure behavior and business outcomes.</p>
+            </button>
           </div>
 
-          <div id='summaryCard' class='hidden card p-6 lg:p-8'>
-            <div class='flex items-center justify-between flex-wrap gap-4 mb-5'>
-              <h2 class='text-2xl font-black tracking-tight'>Change Summary Dashboard</h2>
-              <span id='summaryTierBadge' class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100'>Gold</span>
-            </div>
-            <div class='grid md:grid-cols-3 gap-4 mb-5'>
-              <div class='card p-4 bg-slate-50 border-slate-100'><div class='text-xs uppercase tracking-widest text-slate-500 font-bold mb-2'>Tier</div><div id='summaryTier' class='text-2xl font-black'>Gold</div></div>
-              <div class='card p-4 bg-slate-50 border-slate-100'><div class='text-xs uppercase tracking-widest text-slate-500 font-bold mb-2'>Impact score</div><div id='summaryImpact' class='text-2xl font-black'>0</div></div>
-              <div class='card p-4 bg-slate-50 border-slate-100'><div class='text-xs uppercase tracking-widest text-slate-500 font-bold mb-2'>Manager effort</div><div id='summaryManager' class='text-2xl font-black'>Medium</div></div>
-            </div>
-            <div class='card p-5 bg-indigo-50 border-indigo-100 mb-5'>
-              <div class='text-sm text-indigo-900 font-bold mb-2'>Recommended interventions</div>
-              <div id='summaryInterventions' class='text-sm text-indigo-800 leading-6'></div>
-            </div>
-            <div class='card p-5 bg-slate-950 text-white border-slate-900'>
-              <div class='text-sm text-white/80 font-bold mb-2'>One-stop shop guidance</div>
-              <div class='text-sm text-slate-200 leading-6'>Bronze projects stay in the portal and use templates, FAQs, and self-service guidance. Silver projects get guided support. Gold projects get full partnership.</div>
-            </div>
-          </div>
+          <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5" id="templateGrid"></div>
         </section>
 
-        <!-- Survey -->
-        <section id='view-survey' class='hidden max-w-6xl mx-auto space-y-8'>
+        <!-- MANAGER HUB -->
+        <section id="view-manager" class="hidden max-w-6xl mx-auto space-y-8">
           <div>
-            <h1 class='text-4xl font-black tracking-tight'>Change Request Survey</h1>
-            <p class='text-slate-500 mt-2'>Use this to capture a real intake submission from PMO or the business.</p>
+            <h1 class="text-4xl font-black tracking-tight">Manager Hub</h1>
+            <p class="text-gray-500 mt-2">What managers need to say, do, watch, escalate, and recognize to help adoption stick.</p>
           </div>
-          <div class='grid xl:grid-cols-2 gap-5'>
-            <div class='card p-6'>
-              <div class='flex items-center justify-between mb-4'>
+
+          <div class="grid lg:grid-cols-3 gap-5">
+            <div class="card p-6 lg:col-span-2">
+              <div class="flex items-center justify-between mb-4">
                 <div>
-                  <h2 class='text-xl font-extrabold tracking-tight'>Embedded survey</h2>
-                  <p class='text-sm text-slate-500 mt-1'>Replace the placeholder URL with your actual Google Form link.</p>
+                  <h2 class="text-xl font-black">This Week's Manager Actions</h2>
+                  <p class="text-sm text-gray-500 mt-1">Manager reinforcement rhythm for active changes.</p>
                 </div>
-                <span class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100'>Live intake</span>
+                <span class="badge badge-green">Weekly</span>
               </div>
-              <div class='rounded-2xl overflow-hidden border border-slate-200'>
-                <iframe
-                  src='https://forms.gle/ig8fjAMK2bUR1s2A9'
-                  width='100%'
-                  height='700'
-                  style='border:0;'
-                  loading='lazy'>
-                </iframe>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between p-4 rounded-2xl border border-gray-100"><span><b>Say:</b> Explain what is changing and why it matters.</span><span class="text-green-600 font-bold">Ready</span></div>
+                <div class="flex items-center justify-between p-4 rounded-2xl border border-gray-100"><span><b>Do:</b> Brief your team using the Manager Action Card.</span><span class="text-yellow-600 font-bold">Due soon</span></div>
+                <div class="flex items-center justify-between p-4 rounded-2xl border border-gray-100"><span><b>Watch:</b> Look for workarounds or repeated questions.</span><span class="text-gray-500 font-bold">Pending</span></div>
+                <div class="flex items-center justify-between p-4 rounded-2xl border border-gray-100"><span><b>Escalate:</b> Raise saturation or blockers through the feedback route.</span><span class="text-red-600 font-bold">Open</span></div>
               </div>
             </div>
-            <div class='card p-6 bg-slate-950 text-white border-slate-900 overflow-hidden relative'>
-              <div class='absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-fuchsia-600/10'></div>
-              <div class='relative'>
-                <div class='flex items-center gap-2 mb-5'><i data-lucide='sparkles' class='w-5 h-5 text-indigo-300'></i><h2 class='text-xl font-extrabold'>How it works</h2></div>
-                <div class='space-y-3 text-sm text-slate-200 leading-6'>
-                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>PMO or the business completes the form.</div>
-                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>The change team reviews the request and assigns Gold, Silver, or Bronze support.</div>
-                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>Bronze projects use the portal as their self-service support hub.</div>
-                  <div class='rounded-2xl border border-white/10 bg-white/5 p-4'>Gold and Silver projects receive guided change support, manager actions, and measurement.</div>
-                </div>
-                <a href='https://forms.gle/ig8fjAMK2bUR1s2A9' target='_blank' class='mt-6 w-full inline-flex items-center justify-center gap-2 rounded-2xl border border-indigo-400/40 bg-indigo-500/10 py-3 font-semibold text-indigo-200 hover:bg-indigo-500/20 transition'>
-                  <i data-lucide='external-link' class='w-4 h-4'></i> Open survey in a new tab
-                </a>
+
+            <div class="card p-6 bg-gray-950 text-white border-gray-900">
+              <div class="font-black mb-3">Signals Pack</div>
+              <div class="space-y-3 text-sm">
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><b class="text-green-300">Reinforce</b><br>Use the new guided workflow in every eligible case.</div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><b class="text-red-300">Stop</b><br>Do not continue old manual package creation when the guided path applies.</div>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><b class="text-yellow-300">Escalate</b><br>Repeated errors, unclear exceptions, or customer-impacting blockers.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card p-6">
+            <h2 class="text-xl font-black mb-4">Our DNA Thread Builder</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="field bg-gray-50"><b>What are we focused on?</b><br><span class="text-gray-500">Priority, change, goal, or behavior.</span></div>
+              <div class="field bg-gray-50"><b>Why does it matter?</b><br><span class="text-gray-500">Customer, teammate, or business connection.</span></div>
+              <div class="field bg-gray-50"><b>Which Our DNA behavior?</b><br><span class="text-gray-500">Be for Everyone / Deliver with Impact / Innovate Boldly / Act with Integrity / Empower Our Community.</span></div>
+              <div class="field bg-gray-50"><b>What should employees do?</b><br><span class="text-gray-500">Specific action or reflection to carry forward.</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ANALYTICS -->
+        <section id="view-analytics" class="hidden max-w-7xl mx-auto space-y-8">
+          <div>
+            <h1 class="text-4xl font-black tracking-tight">Adoption Intelligence</h1>
+            <p class="text-gray-500 mt-2">Separate activity from reach, behavior, and outcomes.</p>
+          </div>
+          <div class="grid md:grid-cols-4 gap-5">
+            <div class="metric p-6"><div class="text-sm text-gray-500">Activity complete</div><h3 class="text-ebay-blue mt-2">91%</h3></div>
+            <div class="metric p-6"><div class="text-sm text-gray-500">Reach</div><h3 class="mt-2">84%</h3></div>
+            <div class="metric p-6"><div class="text-sm text-gray-500">Behavior adoption</div><h3 class="text-ebay-green mt-2">76%</h3></div>
+            <div class="metric p-6"><div class="text-sm text-gray-500">Friction signals</div><h3 class="text-ebay-red mt-2">7</h3></div>
+          </div>
+
+          <div class="grid lg:grid-cols-3 gap-5">
+            <div class="card p-6 lg:col-span-2">
+              <div class="font-black mb-4">Adoption Intelligence Scorecard</div>
+              <div class="overflow-hidden rounded-2xl border border-gray-200">
+                <table class="w-full text-left">
+                  <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-widest">
+                    <tr><th class="px-5 py-4">Layer</th><th class="px-5 py-4">Question</th><th class="px-5 py-4">Signal</th><th class="px-5 py-4">Decision</th></tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-100 text-sm">
+                    <tr><td class="px-5 py-4 font-bold">Activity</td><td class="px-5 py-4">Did we execute?</td><td class="px-5 py-4">Comms, sessions, job aids</td><td class="px-5 py-4">Continue</td></tr>
+                    <tr><td class="px-5 py-4 font-bold">Reach</td><td class="px-5 py-4">Did people receive it?</td><td class="px-5 py-4">Attendance, briefings, huddle reach</td><td class="px-5 py-4">Re-target</td></tr>
+                    <tr><td class="px-5 py-4 font-bold">Behavior</td><td class="px-5 py-4">Are people working differently?</td><td class="px-5 py-4">Usage, compliance, workflow completion</td><td class="px-5 py-4">Reinforce</td></tr>
+                    <tr><td class="px-5 py-4 font-bold">Outcome</td><td class="px-5 py-4">Did performance improve?</td><td class="px-5 py-4">AHT, FCR, CSAT, quality</td><td class="px-5 py-4">Sustain / scale</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card p-6">
+              <div class="font-black mb-4">Resistance Signals</div>
+              <div class="space-y-4 text-sm">
+                <div><div class="flex justify-between mb-1"><span>Workarounds continue</span><span>38%</span></div><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-ebay-red w-[38%]"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span>Repeated questions</span><span>28%</span></div><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-ebay-yellow w-[28%]"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span>Manager confidence gap</span><span>18%</span></div><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-ebay-yellow w-[18%]"></div></div></div>
+                <div><div class="flex justify-between mb-1"><span>Resolved</span><span>16%</span></div><div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-ebay-green w-[16%]"></div></div></div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Toolkit -->
-        <section id='view-toolkit' class='hidden max-w-6xl mx-auto space-y-8'>
-          <div>
-            <h1 class='text-4xl font-black tracking-tight'>Toolkit Library</h1>
-            <p class='text-slate-500 mt-2'>Self-service templates for change leads and Bronze projects.</p>
-          </div>
-          <div class='grid md:grid-cols-2 xl:grid-cols-3 gap-5'>
-            <div class='card p-5'><div class='kpi-badge bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4'>Impact Assessment</div><div class='font-bold text-lg mb-2'>GCX Change Impact Matrix</div><p class='text-sm text-slate-500'>Quantify people, process, and tool change quickly.</p></div>
-            <div class='card p-5'><div class='kpi-badge bg-emerald-50 text-emerald-700 border border-emerald-100 mb-4'>Manager Packs</div><div class='font-bold text-lg mb-2'>First 15 Huddle Guide</div><p class='text-sm text-slate-500'>Prompts and FAQs for team briefings.</p></div>
-            <div class='card p-5'><div class='kpi-badge bg-amber-50 text-amber-700 border border-amber-100 mb-4'>Metrics</div><div class='font-bold text-lg mb-2'>Readiness Survey Template</div><p class='text-sm text-slate-500'>Track confidence and adoption risk before launch.</p></div>
-          </div>
-        </section>
-
-        <!-- Manager -->
-        <section id='view-manager' class='hidden max-w-6xl mx-auto space-y-8'>
-          <div>
-            <h1 class='text-4xl font-black tracking-tight'>Manager Hub</h1>
-            <p class='text-slate-500 mt-2'>What managers need to do next to help adoption stick.</p>
-          </div>
-          <div class='grid lg:grid-cols-3 gap-5'>
-            <div class='card p-5 lg:col-span-2'>
-              <div class='font-bold mb-4'>Activation tasks</div>
-              <div class='space-y-3'>
-                <div class='flex items-center justify-between p-4 rounded-2xl border border-slate-100'><span>Review huddle pack</span><span class='text-emerald-600 font-semibold'>Done</span></div>
-                <div class='flex items-center justify-between p-4 rounded-2xl border border-slate-100'><span>Brief your team</span><span class='text-amber-600 font-semibold'>Due soon</span></div>
-                <div class='flex items-center justify-between p-4 rounded-2xl border border-slate-100'><span>Observe new behavior</span><span class='text-slate-500 font-semibold'>Pending</span></div>
-              </div>
-            </div>
-            <div class='card p-5 bg-slate-950 text-white border-slate-900'>
-              <div class='font-bold mb-3'>Strategy tip</div>
-              <p class='text-sm text-slate-200'>Managers who use a simple before and after script in 1:1s see faster adoption.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Analytics -->
-        <section id='view-analytics' class='hidden max-w-6xl mx-auto space-y-8'>
-          <div>
-            <h1 class='text-4xl font-black tracking-tight'>Change Intelligence</h1>
-            <p class='text-slate-500 mt-2'>Readiness, sentiment, and portfolio health over time.</p>
-          </div>
-          <div class='grid md:grid-cols-4 gap-5'>
-            <div class='metric p-6'><div class='text-sm text-slate-500'>Adoption Rate</div><h3 class='text-emerald-600 mt-2'>78.2%</h3></div>
-            <div class='metric p-6'><div class='text-sm text-slate-500'>Sentiment</div><h3 class='mt-2'>84/100</h3></div>
-            <div class='metric p-6'><div class='text-sm text-slate-500'>Manager Buy-in</div><h3 class='text-indigo-600 mt-2'>91%</h3></div>
-            <div class='metric p-6'><div class='text-sm text-slate-500'>Portfolio Risk</div><h3 class='text-rose-500 mt-2'>Normal</h3></div>
-          </div>
-          <div class='grid lg:grid-cols-3 gap-5'>
-            <div class='card p-6 lg:col-span-2'>
-              <div class='font-bold mb-4'>Readiness trend</div>
-              <div class='h-64 flex items-end gap-4'>
-                <div class='flex-1 bg-indigo-100 rounded-t-2xl h-[40%]'></div>
-                <div class='flex-1 bg-indigo-200 rounded-t-2xl h-[52%]'></div>
-                <div class='flex-1 bg-indigo-300 rounded-t-2xl h-[60%]'></div>
-                <div class='flex-1 bg-indigo-300 rounded-t-2xl h-[58%]'></div>
-                <div class='flex-1 bg-indigo-400 rounded-t-2xl h-[75%]'></div>
-                <div class='flex-1 bg-indigo-500 rounded-t-2xl h-[88%]'></div>
-                <div class='flex-1 bg-indigo-600 rounded-t-2xl h-[92%]'></div>
-                <div class='flex-1 bg-indigo-700 rounded-t-2xl h-[90%]'></div>
-              </div>
-            </div>
-            <div class='card p-6'>
-              <div class='font-bold mb-4'>Sentiment mix</div>
-              <div class='space-y-4 text-sm'>
-                <div><div class='flex justify-between mb-1'><span>Positive</span><span>65%</span></div><div class='h-2 bg-slate-100 rounded-full overflow-hidden'><div class='h-full bg-emerald-500 w-[65%]'></div></div></div>
-                <div><div class='flex justify-between mb-1'><span>Neutral</span><span>28%</span></div><div class='h-2 bg-slate-100 rounded-full overflow-hidden'><div class='h-full bg-amber-400 w-[28%]'></div></div></div>
-                <div><div class='flex justify-between mb-1'><span>Resistance</span><span>7%</span></div><div class='h-2 bg-slate-100 rounded-full overflow-hidden'><div class='h-full bg-rose-500 w-[7%]'></div></div></div>
-              </div>
-            </div>
-          </div>
-        </section>
       </div>
     </main>
   </div>
 
+  <!-- Template modal -->
+  <div id="templateModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 modal-backdrop" onclick="closeTemplate()"></div>
+    <div class="absolute right-0 top-0 h-full w-full max-w-3xl bg-white shadow-2xl overflow-y-auto">
+      <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-start justify-between gap-4">
+        <div>
+          <div id="modalType" class="badge badge-blue mb-3">Template</div>
+          <h2 id="modalTitle" class="text-3xl font-black tracking-tight"></h2>
+          <p id="modalDescription" class="text-gray-500 mt-2"></p>
+        </div>
+        <button onclick="closeTemplate()" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="p-6 space-y-6">
+        <div class="grid md:grid-cols-3 gap-3">
+          <div class="card p-4 bg-gray-50 border-gray-100"><div class="tiny-label">Best for</div><div id="modalBestFor" class="font-bold mt-2"></div></div>
+          <div class="card p-4 bg-gray-50 border-gray-100"><div class="tiny-label">Use when</div><div id="modalUseWhen" class="font-bold mt-2"></div></div>
+          <div class="card p-4 bg-gray-50 border-gray-100"><div class="tiny-label">Output</div><div id="modalOutput" class="font-bold mt-2"></div></div>
+        </div>
+        <div class="card p-5">
+          <h3 class="text-lg font-black mb-4">Template fields</h3>
+          <div id="modalFields" class="space-y-3"></div>
+        </div>
+        <div class="card p-5 bg-blue-50 border-blue-100">
+          <h3 class="text-lg font-black text-blue-900 mb-2">Usefulness Check</h3>
+          <p id="modalCheck" class="text-sm text-blue-800 leading-6"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const views = ['dashboard', 'intake', 'portfolio', 'toolkit', 'manager', 'analytics', 'survey'];
+    const views = ['dashboard', 'intake', 'portfolio', 'toolkit', 'manager', 'analytics'];
     const viewButtons = document.querySelectorAll('[data-view]');
     const roleButtons = document.querySelectorAll('[data-role]');
-    const domainButtons = document.querySelectorAll('.domain-btn');
-    const complexityButtons = document.querySelectorAll('.complexity-btn');
     const metricButtons = document.querySelectorAll('.metric-btn');
+    const scoreFields = document.querySelectorAll('.score-field');
 
     let currentStep = 1;
-    let selectedDomain = 'Technology';
-    let selectedComplexity = 3;
-    let selectedTier = 'Bronze';
     const selectedMetrics = new Set(['Usage']);
 
-    const tierInterventions = {
-      Gold: ['Full change plan', 'Sponsor coaching', 'Manager huddles', 'Learning and reinforcement', 'Adoption tracking'],
-      Silver: ['Targeted comms', 'Manager pack', 'Office hours', 'Focused learning'],
-      Bronze: ['Self-service toolkit', 'FAQ', 'Portal summary', 'Light touch support']
+    const initiatives = [
+      { name:'Prepare Our People', owner:'GCX Change Team', audience:'1,500', tier:'Gold', saturation:'Red', adoption:'72%', decision:'Sequence March launch' },
+      { name:'Virtualised Support SME Deprecation', owner:'Service Ops', audience:'850', tier:'Silver', saturation:'Amber', adoption:'61%', decision:'Manager confidence plan' },
+      { name:'eBay Live Streaming on Android', owner:'Product / CX', audience:'420', tier:'Silver', saturation:'Green', adoption:'88%', decision:'Sustain' },
+      { name:'CS Fulfillment Create-a-Package', owner:'Operations', audience:'510', tier:'Gold', saturation:'Amber', adoption:'69%', decision:'Launch mitigations' },
+      { name:'Returns Cancellation Policy', owner:'Policy / Trust', audience:'290', tier:'Bronze', saturation:'Green', adoption:'90%', decision:'Proceed' }
+    ];
+
+    const templates = [
+      {
+        id:'change-snapshot', section:'project', category:'decision', type:'Decision Template', color:'blue',
+        title:'Change Snapshot', desc:'Define the change in human terms before planning begins.',
+        bestFor:'Project Teams, Change Leads, Bronze users', useWhen:'At intake or before planning begins',
+        output:'Plain-language change definition',
+        fields:['Initiative name','Workstream / portfolio','Business owner / sponsor','What is changing?','Why now?','Who is impacted?','What is not changing?','What will people do differently?','What decision is needed?','Risk if adoption is low'],
+        check:'A busy manager should be able to read this and explain what their team needs to do differently in under one minute.'
+      },
+      {
+        id:'impact-canvas', section:'project', category:'decision', type:'Decision Template', color:'blue',
+        title:'Change Impact Canvas', desc:'Understand who is impacted, what changes for them, and what support is needed.',
+        bestFor:'Project Teams, Change Leads, Leaders, Business Owners', useWhen:'At intake and before launch dates are locked',
+        output:'Audience impact, behavior shift, risk, and readiness view',
+        fields:['Initiative / change','Business owner','Why now?','Impacted audience','Impact level','What changes for them?','What is not changing?','Behavior shift','Expected friction','Manager role','Support needed','Saturation risk','Readiness risk','Adoption signal','Decision needed'],
+        check:'The canvas should make it clear who is impacted, how hard the change will be to adopt, and what leaders need to decide.'
+      },
+      {
+        id:'support-selector', section:'project', category:'decision', type:'Decision Template', color:'blue',
+        title:'Support Level Selector', desc:'Right-size Gold / Silver / Bronze support based on adoption risk.',
+        bestFor:'Change Leads, Leaders, Project Teams', useWhen:'During intake and before delivery planning is locked',
+        output:'Tier decision and minimum required templates',
+        fields:['Audience impact','Behavior shift','Operational risk','Manager dependency','Saturation timing','Total score','Recommended tier','Minimum required support','Decision owner'],
+        check:'Urgency should not override the score. If the audience is saturated or managers are critical, increase support.'
+      },
+      {
+        id:'behavior-canvas', section:'project', category:'adoption', type:'Adoption Template', color:'green',
+        title:'Behavior Shift Canvas', desc:'Clarify the before-and-after behavior required for adoption.',
+        bestFor:'Project Teams, Change Leads, People Managers', useWhen:'When people need to work differently',
+        output:'Before / after behavior, friction, and adoption proof',
+        fields:['Audience / role','Today','Future','Expected friction','Manager reinforcement needed','Support needed','30-day adoption signal','60/90-day sustain signal'],
+        check:'If the future behavior cannot be described clearly, the change is not ready to launch.'
+      },
+      {
+        id:'load-check', section:'project', category:'risk', type:'Risk Template', color:'red',
+        title:'Audience Load Check', desc:'Identify saturation and sequencing risk before launch dates are locked.',
+        bestFor:'Project Teams, Change Leads, Leaders', useWhen:'Before launch timing is committed',
+        output:'Saturation risk and leader decision',
+        fields:['Proposed launch date','Audience impacted','Other changes landing','Audience overlap','Peak operating period?','Saturation risk','Mitigation options','Leader decision required'],
+        check:'Saturation is a leadership decision. Ask whether the same audience is being asked to absorb too much at once.'
+      },
+      {
+        id:'launch-confidence', section:'project', category:'risk', type:'Readiness Template', color:'yellow',
+        title:'Launch Confidence Check', desc:'Make go-live a decision, not just a date.',
+        bestFor:'Project Teams, Change Leads, Leaders', useWhen:'Two to four weeks before launch',
+        output:'Go / go with mitigations / no-go decision',
+        fields:['Leader alignment','Manager readiness','Audience understanding','Training / job aids','Support model','Calendar / saturation','Adoption metrics','Decision','Required actions before launch'],
+        check:'A red item does not automatically mean no-go. It means the mitigation and owner must be explicit before launch.'
+      },
+      {
+        id:'adoption-scorecard', section:'project', category:'adoption', type:'Adoption Template', color:'green',
+        title:'Adoption Intelligence Scorecard', desc:'Measure behavior change and business outcomes, not just activity.',
+        bestFor:'Project Teams, Change Leads, Leaders', useWhen:'At readiness, launch, and 30/60/90 checkpoints',
+        output:'Decision-ready adoption and outcome view',
+        fields:['Activity','Reach','Behavior','Outcome','Decision triggered','30-day view','60-day view','90-day view'],
+        check:'The scorecard should answer what is landing, what is not, where to intervene, and which outcomes are moving.'
+      },
+      {
+        id:'leader-cascade', section:'leadership', category:'leadership', type:'Leadership Template', color:'blue',
+        title:'Leader Cascade Brief', desc:'Align leaders before managers are expected to drive adoption.',
+        bestFor:'Leaders, Sponsors, Change Leads', useWhen:'Before manager activation or major change moments',
+        output:'Aligned narrative and leader decision ask',
+        fields:['What is changing?','Why now?','Why it matters to GCX','What success looks like','What leaders need to reinforce','What leaders should avoid saying','Decision needed','DNA add-on'],
+        check:'Leaders do not need long decks. They need narrative, trade-offs, decisions, and reinforcement messages.'
+      },
+      {
+        id:'manager-action', section:'leadership', category:'leadership', type:'Leadership Template', color:'green',
+        title:'Manager Action Card', desc:'Give managers say / do / watch / escalate / recognize guidance.',
+        bestFor:'People Managers, Change Leads, Project Teams', useWhen:'Two weeks before launch through the first month after launch',
+        output:'Manager-ready action guidance',
+        fields:['What is changing','Why it matters','Say this','Do this','Watch for this','Escalate this','Recognize this','Top FAQs'],
+        check:'Managers are not a communications channel. They are the adoption engine.'
+      },
+      {
+        id:'signals-pack', section:'leadership', category:'leadership', type:'Leadership Template', color:'green',
+        title:'Manager Enablement & Signals Pack', desc:'Give managers one source of truth with Reinforce / Stop / Escalate.',
+        bestFor:'People Managers, Change Leads', useWhen:'Biweekly or during major change',
+        output:'Manager pack and action signals',
+        fields:['What is new','Reinforce','Stop','Escalate','Team huddle script','Top 5 FAQs','Resources','Feedback route'],
+        check:'This should give managers clarity and create a feedback loop for leaders.'
+      },
+      {
+        id:'dna-thread', section:'leadership', category:'leadership', type:'Leadership Template', color:'green',
+        title:'DNA Thread Builder', desc:'Connect priority, customer impact, culture, responsible AI, and action.',
+        bestFor:'Leaders, Managers, Comms, Change Leads', useWhen:'Any recurring communication or leader update',
+        output:'Culture-connected message or discussion prompt',
+        fields:['What are we focused on?','Why does it matter?','How does this connect to strategy and customers?','Which Our DNA behavior?','What real experience brings this to life?','What should employees know, do, question, or carry forward?'],
+        check:'Use Our DNA to explain how work gets done, not as a slogan attached after the fact.'
+      }
+    ];
+
+    const tierTemplates = {
+      Gold: ['Change Snapshot','Change Impact Canvas','Support Level Selector','Behavior Shift Canvas','Leader Cascade Brief','Manager Action Card','Audience Load Check','Launch Confidence Check','Adoption Intelligence Scorecard'],
+      Silver: ['Change Snapshot','Change Impact Canvas','Support Level Selector','Manager Action Card','Launch Confidence Check','Basic Adoption Measures'],
+      Bronze: ['Change Snapshot','Change Impact Canvas','60-Second Message Builder','FAQ Builder','Manager Script','Basic Success Measure']
     };
 
     function openView(view) {
@@ -653,76 +797,64 @@
       viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
       if (view === 'intake') {
         updateStepIndicators();
-      } else {
-        resetIntakeUI();
       }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
     }
 
-    function resetIntakeUI() {
-      currentStep = 1;
-      showStep(1);
-      updateStepIndicators();
-      document.getElementById('summaryCard').classList.add('hidden');
-      document.getElementById('nextBtn').textContent = 'Continue';
-      document.getElementById('calendarWarning').classList.add('hidden');
+    function setRole(role) {
+      roleButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.role === role));
+      const subtitle = document.getElementById('role-subtitle');
+      subtitle.textContent = role === 'Leader'
+        ? 'Portfolio view and decision support for leaders'
+        : role === 'Manager'
+          ? 'Manager-ready actions, signals, and reinforcement'
+          : 'Intake, tiering, readiness, and adoption orchestration';
+
+      if (role === 'Manager') openView('manager');
+      if (role === 'Change Lead') openView('intake');
+      if (role === 'Leader') openView('dashboard');
     }
 
     function showStep(step) {
-      [1,2,3,4].forEach(n => document.getElementById(`intake-step-${n}`).classList.toggle('hidden', n !== step));
+      [1,2,3,4,5].forEach(n => document.getElementById(`intake-step-${n}`).classList.toggle('hidden', n !== step));
     }
 
     function updateStepIndicators() {
-      [1,2,3,4].forEach(n => {
+      [1,2,3,4,5].forEach(n => {
         const dot = document.getElementById(`dot-${n}`);
         if (!dot) return;
         dot.classList.remove('active', 'done');
         if (n < currentStep) dot.classList.add('done');
         if (n === currentStep) dot.classList.add('active');
       });
-      document.getElementById('progress').style.width = `${(currentStep / 4) * 100}%`;
-      document.getElementById('step-label').textContent = `Step ${currentStep} of 4`;
-      document.getElementById('nextBtn').textContent = currentStep === 4 ? 'Generate Summary' : 'Continue';
+      document.getElementById('progress').style.width = `${(currentStep / 5) * 100}%`;
+      document.getElementById('step-label').textContent = `Step ${currentStep} of 5`;
+      document.getElementById('nextBtn').textContent = currentStep === 5 ? 'Generate Summary' : 'Continue';
+      updateTierLive();
     }
 
-    function calculateScore() {
-      const audience = parseInt(document.getElementById('audienceSize').value || '150', 10);
-      const title = document.getElementById('initiativeTitle').value.trim();
-      const objective = document.getElementById('initiativeObjective').value.trim();
-      const complexityScore = selectedComplexity * 14;
-      let score = complexityScore;
-      if (audience > 500) score += 22;
-      else if (audience > 100) score += 10;
-      if (selectedDomain === 'Policy') score += 8;
-      if (selectedMetrics.size >= 2) score += 5;
-      if (title.length > 0) score += 5;
-      if (objective.length > 20) score += 5;
-      score = Math.min(score, 100);
-
-      const tier = score >= 75 ? 'Gold' : score >= 45 ? 'Silver' : 'Bronze';
-      const manager = selectedComplexity >= 4 || selectedMetrics.size >= 3 ? 'High' : selectedComplexity >= 3 ? 'Medium' : 'Low';
-
-      selectedTier = tier;
-      document.getElementById('summaryTier').textContent = tier;
-      document.getElementById('summaryImpact').textContent = `${score}`;
-      document.getElementById('summaryManager').textContent = manager;
-      document.getElementById('summaryTierBadge').textContent = tier;
-      document.getElementById('summaryTierBadge').className = tier === 'Gold'
-        ? 'kpi-badge bg-amber-50 text-amber-700 border border-amber-100'
-        : tier === 'Silver'
-          ? 'kpi-badge bg-slate-100 text-slate-700 border border-slate-200'
-          : 'kpi-badge bg-orange-50 text-orange-700 border border-orange-100';
-      document.getElementById('summaryInterventions').innerHTML = tierInterventions[tier].map(x => `<div>• ${x}</div>`).join('');
-      document.getElementById('summaryCard').classList.remove('hidden');
+    function updateTierLive() {
+      const total = ['audienceImpact','behaviorShift','operationalRisk','managerDependency','saturationTiming']
+        .map(id => parseInt(document.getElementById(id)?.value || '2', 10))
+        .reduce((a,b)=>a+b,0);
+      const tier = total >= 12 ? 'Gold' : total >= 8 ? 'Silver' : 'Bronze';
+      const liveTier = document.getElementById('liveTier');
+      const liveScore = document.getElementById('liveScore');
+      if (liveTier) liveTier.textContent = tier;
+      if (liveScore) liveScore.textContent = `Score: ${total}`;
+      const nextTemplates = document.getElementById('nextTemplates');
+      if (nextTemplates) nextTemplates.innerHTML = tierTemplates[tier].map(x => `<div>• ${x}</div>`).join('');
+      return { total, tier };
     }
 
     function goNext() {
-      if (currentStep < 4) {
+      if (currentStep < 5) {
         currentStep += 1;
         showStep(currentStep);
         updateStepIndicators();
       } else {
-        calculateScore();
-        document.getElementById('summaryCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        generateSummary();
       }
     }
 
@@ -734,93 +866,152 @@
       }
     }
 
-    function setRole(role) {
-      roleButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.role === role));
-      const subtitle = document.getElementById('role-subtitle');
-      subtitle.textContent = role === 'Leader'
-        ? 'Portfolio view and decision support for leaders'
-        : role === 'Manager'
-          ? 'Manager-ready actions, packs, and reinforcement'
-          : 'Intake, prioritization, and adoption orchestration';
+    function generateSummary() {
+      const { total, tier } = updateTierLive();
+      const managerScore = parseInt(document.getElementById('managerDependency').value || '2', 10);
+      const manager = managerScore === 3 ? 'High' : managerScore === 2 ? 'Medium' : 'Low';
+
+      document.getElementById('summaryTier').textContent = tier;
+      document.getElementById('summaryImpact').textContent = `${total}/15`;
+      document.getElementById('summaryManager').textContent = manager;
+      document.getElementById('summaryTierBadge').textContent = tier;
+      document.getElementById('summaryTierBadge').className = tier === 'Gold' ? 'badge badge-yellow' : tier === 'Silver' ? 'badge bg-gray-100 text-gray-700 border border-gray-200' : 'badge badge-blue';
+      document.getElementById('summaryInterventions').innerHTML = tierTemplates[tier].map(x => `<div>• ${x}</div>`).join('');
+
+      const title = document.getElementById('initiativeTitle').value || '[initiative]';
+      const audience = document.getElementById('impactedAudience').value || '[audience]';
+      const prompt = `Create a change summary for ${title}. Audience: ${audience}. Include why it matters, what changes, the behavior shift, expected friction, manager actions, adoption signals, and recommended ${tier} support.`;
+      document.getElementById('summaryPrompt').textContent = prompt;
+
+      document.getElementById('summaryCard').classList.remove('hidden');
+      document.getElementById('summaryCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function toggleButtonGroup(buttons, selectedValue, selectedClasses, unselectedClasses) {
-      buttons.forEach(btn => {
-        const isSelected = btn.dataset.value === selectedValue;
-        btn.classList.remove(...selectedClasses, ...unselectedClasses);
-        if (isSelected) btn.classList.add(...selectedClasses);
-        else btn.classList.add(...unselectedClasses);
-      });
+    function autoFillDemo() {
+      document.getElementById('initiativeTitle').value = 'eBay Live CS Fulfillment - Create-a-Package';
+      document.getElementById('projectWorkstream').value = 'eBay Live';
+      document.getElementById('projectOwner').value = 'Operations Leader';
+      document.getElementById('pmoSource').value = 'PMO assigned from H1 portfolio review';
+      document.getElementById('whatChanging').value = 'Frontline teams will use a new guided workflow for live CS fulfillment instead of manually creating packages through multiple steps.';
+      document.getElementById('whyNow').value = 'The change improves consistency, reduces manual errors, and helps teams support live commerce workflows more confidently.';
+      document.getElementById('notChanging').value = 'Customer service escalation routes and existing quality expectations remain unchanged.';
+      document.getElementById('impactedAudience').value = 'Frontline CS teammates, people managers, service operations, and support partners.';
+      document.getElementById('impactDescription').value = 'The workflow, task sequence, manager coaching focus, and adoption tracking expectations will change.';
+      document.getElementById('beforeText').value = 'Teams manually create packages through multiple steps and rely on local workarounds.';
+      document.getElementById('afterText').value = 'Teams use the guided workflow consistently for eligible cases.';
+      document.getElementById('frictionText').value = 'Unclear exceptions, old habits, confidence gap during live customer interactions.';
+      document.getElementById('managerRoleText').value = 'Managers need to brief the team, reinforce use of the guided workflow, watch for workarounds, and escalate recurring blockers.';
+      document.getElementById('audienceImpact').value = '3';
+      document.getElementById('behaviorShift').value = '3';
+      document.getElementById('operationalRisk').value = '2';
+      document.getElementById('managerDependency').value = '3';
+      document.getElementById('saturationTiming').value = '2';
+      updateTierLive();
     }
 
-    domainButtons.forEach(btn => {
-      btn.dataset.value = btn.dataset.domain;
-      btn.addEventListener('click', () => {
-        selectedDomain = btn.dataset.domain;
-        toggleButtonGroup(domainButtons, selectedDomain, ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
-      });
-    });
+    function renderTemplates(filter='all') {
+      const grid = document.getElementById('templateGrid');
+      const filtered = templates.filter(t => filter === 'all' || t.section === filter || t.category === filter);
+      grid.innerHTML = filtered.map(t => {
+        const badgeClass = t.color === 'red' ? 'badge-red' : t.color === 'yellow' ? 'badge-yellow' : t.color === 'green' ? 'badge-green' : 'badge-blue';
+        return `
+          <button onclick="openTemplate('${t.id}')" class="template-card text-left card p-5">
+            <span class="badge ${badgeClass} mb-4">${t.type}</span>
+            <div class="font-black text-lg mb-2">${t.title}</div>
+            <p class="text-sm text-gray-500 leading-6">${t.desc}</p>
+            <div class="mt-4 flex items-center gap-2 text-sm font-bold text-ebay-blue">Open template <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+          </button>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
 
-    complexityButtons.forEach(btn => {
-      btn.dataset.value = btn.dataset.complexity;
-      btn.addEventListener('click', () => {
-        selectedComplexity = parseInt(btn.dataset.complexity, 10);
-        toggleButtonGroup(complexityButtons, String(selectedComplexity), ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
-      });
-    });
+    function filterTemplates(filter) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.filter === filter));
+      renderTemplates(filter);
+      openView('toolkit');
+    }
+
+    function openTemplate(id) {
+      const t = templates.find(x => x.id === id);
+      if (!t) return;
+      const badgeClass = t.color === 'red' ? 'badge badge-red' : t.color === 'yellow' ? 'badge badge-yellow' : t.color === 'green' ? 'badge badge-green' : 'badge badge-blue';
+      document.getElementById('modalType').className = badgeClass + ' mb-3';
+      document.getElementById('modalType').textContent = t.type;
+      document.getElementById('modalTitle').textContent = t.title;
+      document.getElementById('modalDescription').textContent = t.desc;
+      document.getElementById('modalBestFor').textContent = t.bestFor;
+      document.getElementById('modalUseWhen').textContent = t.useWhen;
+      document.getElementById('modalOutput').textContent = t.output;
+      document.getElementById('modalFields').innerHTML = t.fields.map(f => `
+        <div class="grid md:grid-cols-3 gap-3 items-start rounded-2xl border border-gray-100 p-4">
+          <div class="font-bold">${f}</div>
+          <div class="md:col-span-2 text-sm text-gray-500">[Enter ${f.toLowerCase()}]</div>
+        </div>
+      `).join('');
+      document.getElementById('modalCheck').textContent = t.check;
+      document.getElementById('templateModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeTemplate() {
+      document.getElementById('templateModal').classList.add('hidden');
+    }
+
+    function renderPortfolio() {
+      const tbody = document.getElementById('initiativeTable');
+      tbody.innerHTML = initiatives.map(i => {
+        const tierClass = i.tier === 'Gold' ? 'badge-yellow' : i.tier === 'Silver' ? 'bg-gray-100 text-gray-700 border border-gray-200' : 'badge-blue';
+        const satClass = i.saturation === 'Red' ? 'badge-red' : i.saturation === 'Amber' ? 'badge-yellow' : 'badge-green';
+        return `
+          <tr>
+            <td class="px-5 py-4"><div class="font-bold">${i.name}</div></td>
+            <td class="px-5 py-4">${i.owner}</td>
+            <td class="px-5 py-4">${i.audience}</td>
+            <td class="px-5 py-4"><span class="badge ${tierClass}">${i.tier}</span></td>
+            <td class="px-5 py-4"><span class="badge ${satClass}">${i.saturation}</span></td>
+            <td class="px-5 py-4">${i.adoption}</td>
+            <td class="px-5 py-4 font-semibold">${i.decision}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', goNext);
+    document.getElementById('backBtn').addEventListener('click', goBack);
+    document.getElementById('aiFillBtn').addEventListener('click', autoFillDemo);
+
+    viewButtons.forEach(btn => btn.addEventListener('click', () => openView(btn.dataset.view)));
+    roleButtons.forEach(btn => btn.addEventListener('click', () => setRole(btn.dataset.role)));
+    scoreFields.forEach(field => field.addEventListener('change', updateTierLive));
 
     metricButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        const label = btn.textContent.trim();
+        const label = btn.dataset.metric;
         if (selectedMetrics.has(label)) {
           selectedMetrics.delete(label);
-          btn.classList.remove('border-indigo-600', 'bg-indigo-50', 'text-indigo-700');
+          btn.classList.remove('border-blue-600', 'bg-blue-50', 'text-blue-700');
         } else {
           selectedMetrics.add(label);
-          btn.classList.add('border-indigo-600', 'bg-indigo-50', 'text-indigo-700');
+          btn.classList.add('border-blue-600', 'bg-blue-50', 'text-blue-700');
         }
       });
-    });
-
-    document.getElementById('audienceSize').addEventListener('input', (e) => {
-      document.getElementById('audienceValue').textContent = e.target.value;
     });
 
     document.getElementById('goLiveDate').addEventListener('change', (e) => {
       const month = new Date(e.target.value).getMonth();
       const warning = document.getElementById('calendarWarning');
-      if (month === 2 || month === 4) {
-        warning.classList.remove('hidden');
-      } else {
-        warning.classList.add('hidden');
-      }
+      if (month === 2 || month === 4) warning.classList.remove('hidden');
+      else warning.classList.add('hidden');
     });
 
-    document.getElementById('nextBtn').addEventListener('click', goNext);
-    document.getElementById('backBtn').addEventListener('click', goBack);
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => filterTemplates(btn.dataset.filter)));
 
-    document.getElementById('aiFillBtn').addEventListener('click', () => {
-      document.getElementById('initiativeTitle').value = 'eBay Live CS Fulfillment (Live) - Create-a-Package';
-      document.getElementById('pmoSource').value = 'PMO assigned from the H1 portfolio review';
-      document.getElementById('projectOwner').value = 'Operations Leader';
-      document.getElementById('projectWorkstream').value = 'eBay Live';
-      document.getElementById('initiativeObjective').value = 'Create a repeatable package workflow for live CS fulfilment and improve adoption with managers and frontline teams.';
-      document.getElementById('audienceSize').value = 510;
-      document.getElementById('audienceValue').textContent = '510';
-      selectedDomain = 'Process';
-      selectedComplexity = 4;
-      toggleButtonGroup(domainButtons, selectedDomain, ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
-      toggleButtonGroup(complexityButtons, String(selectedComplexity), ['border-indigo-600', 'bg-indigo-50', 'text-indigo-700'], []);
-    });
-
-    viewButtons.forEach(btn => btn.addEventListener('click', () => openView(btn.dataset.view)));
-    roleButtons.forEach(btn => btn.addEventListener('click', () => setRole(btn.dataset.role)));
-
+    // Initialize
+    renderTemplates();
+    renderPortfolio();
     openView('dashboard');
     document.getElementById('goLiveDate').valueAsDate = new Date();
-    selectedTier = 'Bronze';
-    document.getElementById('summaryInterventions').innerHTML = tierInterventions.Bronze.map(x => `<div>• ${x}</div>`).join('');
-    document.getElementById('summaryTierBadge').textContent = 'Bronze';
+    updateTierLive();
     lucide.createIcons();
   </script>
 </body>
