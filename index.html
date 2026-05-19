@@ -518,17 +518,32 @@
           <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
             <div>
               <h1 class="text-4xl font-black tracking-tight">Template Library</h1>
-              <p class="text-gray-500 mt-2">Core templates from the GCX Change Enablement Toolkit, grouped by job to be done.</p>
+              <p class="text-gray-500 mt-2">Core templates from the GCX Change Enablement Toolkit, grouped by job to be done. Each template opens as a Google Doc copy so users can complete and share their own version.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button onclick="downloadAllTemplates()" class="px-4 py-2 rounded-full bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
-                <i data-lucide="download" class="w-4 h-4"></i> Download all templates
-              </button>
+              <a href="https://drive.google.com/drive/folders/GOOGLE_DOC_TEMPLATE_FOLDER_ID" target="_blank" class="px-4 py-2 rounded-full bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
+                <i data-lucide="external-link" class="w-4 h-4"></i> Open Google Doc templates
+              </a>
               <button class="tab-btn active px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="all">All</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="project">Project Delivery</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="leadership">Leadership</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="risk">Risk / Readiness</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="adoption">Adoption</button>
+            </div>
+          </div>
+
+          
+          <div class="card p-5 bg-blue-50 border-blue-100">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-ebay-blue text-white flex items-center justify-center">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="font-black text-blue-950">How Google Doc templates work</div>
+                <p class="text-sm text-blue-800 mt-1 leading-6">
+                  Select a template, then click <b>Open Google Doc template</b>. The link should use Google Docs <b>/copy</b> mode so each user creates their own editable copy without changing the master.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -661,9 +676,9 @@
           <p id="modalDescription" class="text-gray-500 mt-2"></p>
         </div>
         <div class="flex items-center gap-2">
-          <button id="modalDownloadBtn" class="px-4 py-3 rounded-2xl bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
-            <i data-lucide="download" class="w-4 h-4"></i> Download
-          </button>
+          <a id="modalGoogleDocBtn" href="#" target="_blank" class="px-4 py-3 rounded-2xl bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
+            <i data-lucide="file-text" class="w-4 h-4"></i> Open Google Doc template
+          </a>
           <button onclick="closeTemplate()" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
       </div>
@@ -793,6 +808,25 @@
         check:'Use Our DNA to explain how work gets done, not as a slogan attached after the fact.'
       }
     ];
+
+
+    const googleDocTemplateLinks = {
+      'change-snapshot': 'https://docs.google.com/document/d/CHANGE_SNAPSHOT_TEMPLATE_ID/copy',
+      'impact-canvas': 'https://docs.google.com/document/d/CHANGE_IMPACT_CANVAS_TEMPLATE_ID/copy',
+      'support-selector': 'https://docs.google.com/document/d/SUPPORT_LEVEL_SELECTOR_TEMPLATE_ID/copy',
+      'behavior-canvas': 'https://docs.google.com/document/d/BEHAVIOR_SHIFT_CANVAS_TEMPLATE_ID/copy',
+      'load-check': 'https://docs.google.com/document/d/AUDIENCE_LOAD_CHECK_TEMPLATE_ID/copy',
+      'launch-confidence': 'https://docs.google.com/document/d/LAUNCH_CONFIDENCE_CHECK_TEMPLATE_ID/copy',
+      'adoption-scorecard': 'https://docs.google.com/document/d/ADOPTION_INTELLIGENCE_SCORECARD_TEMPLATE_ID/copy',
+      'leader-cascade': 'https://docs.google.com/document/d/LEADER_CASCADE_BRIEF_TEMPLATE_ID/copy',
+      'manager-action': 'https://docs.google.com/document/d/MANAGER_ACTION_CARD_TEMPLATE_ID/copy',
+      'signals-pack': 'https://docs.google.com/document/d/MANAGER_ENABLEMENT_SIGNALS_PACK_TEMPLATE_ID/copy',
+      'dna-thread': 'https://docs.google.com/document/d/DNA_THREAD_BUILDER_TEMPLATE_ID/copy'
+    };
+
+    templates.forEach(template => {
+      template.googleDocUrl = googleDocTemplateLinks[template.id] || '#';
+    });
 
     const tierTemplates = {
       Gold: ['Change Snapshot','Change Impact Canvas','Support Level Selector','Behavior Shift Canvas','Leader Cascade Brief','Manager Action Card','Audience Load Check','Launch Confidence Check','Adoption Intelligence Scorecard'],
@@ -1002,9 +1036,9 @@ GCX Change Enablement Toolkit`;
               <p class="text-sm text-gray-500 leading-6">${t.desc}</p>
               <div class="mt-4 flex items-center gap-2 text-sm font-bold text-ebay-blue">Open template <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
             </button>
-            <button onclick="downloadTemplate('${t.id}')" class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:text-ebay-blue hover:border-blue-200">
-              <i data-lucide="download" class="w-4 h-4"></i> Download editable template
-            </button>
+            <a href="${t.googleDocUrl}" target="_blank" class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:text-ebay-blue hover:border-blue-200">
+              <i data-lucide="file-text" class="w-4 h-4"></i> Open Google Doc template
+            </a>
           </div>
         `;
       }).join('');
@@ -1035,7 +1069,7 @@ GCX Change Enablement Toolkit`;
         </div>
       `).join('');
       document.getElementById('modalCheck').textContent = t.check;
-      document.getElementById('modalDownloadBtn').onclick = () => downloadTemplate(t.id);
+      document.getElementById('modalGoogleDocBtn').href = t.googleDocUrl || '#';
       document.getElementById('templateModal').classList.remove('hidden');
       lucide.createIcons();
     }
