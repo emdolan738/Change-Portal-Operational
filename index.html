@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -88,7 +88,7 @@
         <button class="sidebar-link active" data-view="dashboard"><i data-lucide="layout-dashboard" class="w-4 h-4"></i>Dashboard</button>
         <button class="sidebar-link" data-view="intake"><i data-lucide="wand-sparkles" class="w-4 h-4"></i>Change Designer</button>
         <button class="sidebar-link" data-view="portfolio"><i data-lucide="layers-3" class="w-4 h-4"></i>Portfolio</button>
-        <button class="sidebar-link" data-view="toolkit"><i data-lucide="layout-template" class="w-4 h-4"></i>Templates</button>
+        <button class="sidebar-link" data-view="toolkit"><i data-lucide="layout-template" class="w-4 h-4"></i>Toolkit & Templates</button>
         <button class="sidebar-link" data-view="manager"><i data-lucide="users" class="w-4 h-4"></i>Manager Hub</button>
         <button class="sidebar-link" data-view="analytics"><i data-lucide="bar-chart-3" class="w-4 h-4"></i>Adoption Intelligence</button>
       </nav>
@@ -479,6 +479,21 @@
             <button class="px-5 py-3 rounded-2xl bg-ebay-blue text-white font-semibold text-sm shadow-lg shadow-blue-100" onclick="openView('intake')">Create new change</button>
           </div>
 
+          
+          <div class="card p-6 bg-gray-950 text-white border-gray-900">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="badge bg-white/10 text-white border border-white/20 mb-3">Full toolkit</div>
+                <h2 class="text-2xl font-black">Download the complete toolkit</h2>
+                <p class="text-sm text-gray-200 mt-2 leading-6">Download a Google Docs-ready editable version of the toolkit, including guidance, tiering logic, and all core templates.</p>
+              </div>
+              <button onclick="downloadFullToolkit()" class="shrink-0 px-5 py-3 rounded-2xl bg-white text-gray-950 text-sm font-black inline-flex items-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i> Download
+              </button>
+            </div>
+          </div>
+
+
           <div class="grid lg:grid-cols-4 gap-5">
             <div class="metric p-6"><div class="text-sm text-gray-500">Gold</div><h3 class="text-ebay-yellow mt-2">5</h3></div>
             <div class="metric p-6"><div class="text-sm text-gray-500">Silver</div><h3 class="mt-2">12</h3></div>
@@ -517,13 +532,13 @@
         <section id="view-toolkit" class="hidden max-w-7xl mx-auto space-y-8">
           <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
             <div>
-              <h1 class="text-4xl font-black tracking-tight">Template Library</h1>
-              <p class="text-gray-500 mt-2">Core templates from the GCX Change Enablement Toolkit, grouped by job to be done. Each template opens as a Google Doc copy once the master template links are configured.</p>
+              <h1 class="text-4xl font-black tracking-tight">Toolkit & Templates</h1>
+              <p class="text-gray-500 mt-2">Core templates from the GCX Change Enablement Toolkit, grouped by job to be done. Each template downloads as a Google Docs-ready document users can upload, edit, and share.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <a href="#" onclick="handleTemplateFolderClick(event)" class="px-4 py-2 rounded-full bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
-                <i data-lucide="external-link" class="w-4 h-4"></i> Open Google Doc templates
-              </a>
+              <button onclick="downloadFullToolkit()" class="px-4 py-2 rounded-full bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i> Download full toolkit
+              </button>
               <button class="tab-btn active px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="all">All</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="project">Project Delivery</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="leadership">Leadership</button>
@@ -539,9 +554,9 @@
                 <i data-lucide="file-text" class="w-5 h-5"></i>
               </div>
               <div>
-                <div class="font-black text-blue-950">How Google Doc templates work</div>
+                <div class="font-black text-blue-950">How downloads work</div>
                 <p class="text-sm text-blue-800 mt-1 leading-6">
-                  Select a template, then click <b>Open Google Doc template</b>. Add real Google Docs <b>/copy</b> links in the code so each user creates their own editable copy without changing the master.
+                  Select a template, then click <b>Download Google Docs-ready template</b>. The file downloads as an editable <b>.doc</b> document that can be opened in Word or uploaded directly into Google Docs.
                 </p>
               </div>
             </div>
@@ -677,7 +692,7 @@
         </div>
         <div class="flex items-center gap-2">
           <button id="modalGoogleDocBtn" class="px-4 py-3 rounded-2xl bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
-            <i data-lucide="file-text" class="w-4 h-4"></i> Open Google Doc template
+            <i data-lucide="file-text" class="w-4 h-4"></i> Download Google Docs-ready template
           </button>
           <button onclick="closeTemplate()" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
         </div>
@@ -1036,8 +1051,8 @@ GCX Change Enablement Toolkit`;
               <p class="text-sm text-gray-500 leading-6">${t.desc}</p>
               <div class="mt-4 flex items-center gap-2 text-sm font-bold text-ebay-blue">Open template <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
             </button>
-            <button onclick="openGoogleDocTemplate('${t.id}')" class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:text-ebay-blue hover:border-blue-200">
-              <i data-lucide="file-text" class="w-4 h-4"></i> Open Google Doc template
+            <button onclick="downloadDocTemplate('${t.id}')" class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:text-ebay-blue hover:border-blue-200">
+              <i data-lucide="file-text" class="w-4 h-4"></i> Download Google Docs-ready template
             </button>
           </div>
         `;
@@ -1069,7 +1084,7 @@ GCX Change Enablement Toolkit`;
         </div>
       `).join('');
       document.getElementById('modalCheck').textContent = t.check;
-      document.getElementById('modalGoogleDocBtn').onclick = () => openGoogleDocTemplate(t.id);
+      document.getElementById('modalGoogleDocBtn').onclick = () => downloadDocTemplate(t.id);
       document.getElementById('templateModal').classList.remove('hidden');
       lucide.createIcons();
     }
@@ -1130,6 +1145,147 @@ GCX Change Enablement Toolkit`;
     function downloadAllTemplates() {
       const content = templates.map(buildTemplateMarkdown).join('\n\n');
       downloadTextFile('gcx-change-enablement-templates.md', content);
+    }
+
+
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function buildEditableDocHtml(title, bodyHtml) {
+      return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${escapeHtml(title)}</title>
+<style>
+  body { font-family: Poppins, Arial, sans-serif; color:#111827; line-height:1.45; margin:40px; }
+  h1 { color:#0064D2; font-size:26px; margin-bottom:8px; }
+  h2 { color:#111827; font-size:18px; margin-top:26px; border-bottom:2px solid #0064D2; padding-bottom:6px; }
+  h3 { color:#111827; font-size:14px; margin-bottom:6px; }
+  .meta { background:#F8FAFC; border:1px solid #E5E7EB; border-radius:12px; padding:14px; margin:18px 0; }
+  .tag { display:inline-block; border-radius:999px; padding:4px 10px; font-size:11px; font-weight:bold; background:#EFF6FF; color:#0064D2; border:1px solid #BFDBFE; }
+  table { width:100%; border-collapse:collapse; margin:14px 0 22px; }
+  th { background:#F3F4F6; color:#374151; text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
+  th, td { border:1px solid #E5E7EB; padding:10px; vertical-align:top; }
+  .fill { min-height:32px; color:#6B7280; }
+  .check { background:#F0FDF4; border:1px solid #BBF7D0; border-radius:12px; padding:14px; }
+  .footer { margin-top:30px; font-size:11px; color:#6B7280; }
+</style>
+</head>
+<body>
+${bodyHtml}
+</body>
+</html>`;
+    }
+
+    function downloadDocFile(filename, htmlContent) {
+      const blob = new Blob([htmlContent], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function buildTemplateDoc(t) {
+      const rows = t.fields.map(field => `
+        <tr>
+          <td style="width:32%;"><strong>${escapeHtml(field)}</strong></td>
+          <td class="fill">[Complete here]</td>
+        </tr>
+      `).join('');
+
+      const body = `
+        <div class="tag">${escapeHtml(t.type)}</div>
+        <h1>${escapeHtml(t.title)}</h1>
+        <p>${escapeHtml(t.desc)}</p>
+
+        <div class="meta">
+          <p><strong>Best for:</strong> ${escapeHtml(t.bestFor)}</p>
+          <p><strong>Use when:</strong> ${escapeHtml(t.useWhen)}</p>
+          <p><strong>Output:</strong> ${escapeHtml(t.output)}</p>
+        </div>
+
+        <h2>Fill-in Template</h2>
+        <table>
+          <thead><tr><th>Field</th><th>Response</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+
+        <h2>Usefulness Check</h2>
+        <div class="check">${escapeHtml(t.check)}</div>
+
+        <div class="footer">GCX Change Enablement Toolkit</div>
+      `;
+      return buildEditableDocHtml(t.title, body);
+    }
+
+    function downloadDocTemplate(id) {
+      const t = templates.find(x => x.id === id);
+      if (!t) return;
+      downloadDocFile(`${slugify(t.title)}.doc`, buildTemplateDoc(t));
+    }
+
+    function downloadFullToolkit() {
+      const toolkitIntro = `
+        <h1>GCX Change Enablement Toolkit</h1>
+        <p><strong>Project Delivery | Leadership Enablement</strong></p>
+        <p>A guided operating toolkit for landing change: define impact, right-size support, activate leaders and managers, manage saturation, and measure adoption.</p>
+
+        <h2>How to Use This Toolkit</h2>
+        <table>
+          <thead><tr><th>Need</th><th>Start With</th><th>Output</th></tr></thead>
+          <tbody>
+            <tr><td>Define a change</td><td>Change Snapshot</td><td>Plain-language change definition</td></tr>
+            <tr><td>Understand impact</td><td>Change Impact Canvas</td><td>Audience impact and behavior shift</td></tr>
+            <tr><td>Right-size support</td><td>Support Level Selector</td><td>Gold / Silver / Bronze recommendation</td></tr>
+            <tr><td>Check timing risk</td><td>Audience Load Check</td><td>Saturation risk and leader decision</td></tr>
+            <tr><td>Prepare managers</td><td>Manager Action Card</td><td>Say / do / watch / escalate / recognize guidance</td></tr>
+            <tr><td>Measure adoption</td><td>Adoption Intelligence Scorecard</td><td>Behavior and business outcome signals</td></tr>
+          </tbody>
+        </table>
+
+        <h2>Gold / Silver / Bronze</h2>
+        <table>
+          <thead><tr><th>Tier</th><th>Use When</th><th>Minimum Templates</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Gold</strong></td><td>High impact, high risk, saturated, or manager-dependent change.</td><td>Snapshot, Impact Canvas, Support Selector, Behavior Canvas, Leader Cascade, Manager Action, Load Check, Launch Check, Scorecard.</td></tr>
+            <tr><td><strong>Silver</strong></td><td>Medium impact with manageable behavior shift.</td><td>Snapshot, Impact Canvas, Support Selector, Manager Action, Launch Check, Basic Adoption Measures.</td></tr>
+            <tr><td><strong>Bronze</strong></td><td>Low complexity, low risk, clear owner and launch path.</td><td>Snapshot, Impact Canvas, Message Builder, FAQ, Manager Script, Basic Success Measure.</td></tr>
+          </tbody>
+        </table>
+      `;
+
+      const allTemplates = templates.map(t => {
+        const rows = t.fields.map(field => `<tr><td style="width:32%;"><strong>${escapeHtml(field)}</strong></td><td class="fill">[Complete here]</td></tr>`).join('');
+        return `
+          <h2>${escapeHtml(t.title)}</h2>
+          <p><span class="tag">${escapeHtml(t.type)}</span></p>
+          <p>${escapeHtml(t.desc)}</p>
+          <div class="meta">
+            <p><strong>Best for:</strong> ${escapeHtml(t.bestFor)}</p>
+            <p><strong>Use when:</strong> ${escapeHtml(t.useWhen)}</p>
+            <p><strong>Output:</strong> ${escapeHtml(t.output)}</p>
+          </div>
+          <table>
+            <thead><tr><th>Field</th><th>Response</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <div class="check"><strong>Usefulness Check:</strong> ${escapeHtml(t.check)}</div>
+        `;
+      }).join('<br style="page-break-after:always;">');
+
+      const body = toolkitIntro + allTemplates + '<div class="footer">GCX Change Enablement Toolkit</div>';
+      downloadDocFile('gcx-change-enablement-toolkit.doc', buildEditableDocHtml('GCX Change Enablement Toolkit', body));
     }
 
 
