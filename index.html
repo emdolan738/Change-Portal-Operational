@@ -461,6 +461,9 @@
               <div class="card p-5 bg-gray-950 text-white border-gray-900">
                 <div class="text-sm text-white/80 font-bold mb-2">AI draft prompt</div>
                 <div id="summaryPrompt" class="text-sm text-gray-200 leading-6"></div>
+                <button id="downloadSummaryBtn" class="mt-5 w-full rounded-2xl bg-white text-gray-950 py-3 font-bold inline-flex items-center justify-center gap-2">
+                  <i data-lucide="download" class="w-4 h-4"></i> Download change summary
+                </button>
               </div>
             </div>
           </div>
@@ -518,6 +521,9 @@
               <p class="text-gray-500 mt-2">Core templates from the GCX Change Enablement Toolkit, grouped by job to be done.</p>
             </div>
             <div class="flex flex-wrap gap-2">
+              <button onclick="downloadAllTemplates()" class="px-4 py-2 rounded-full bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i> Download all templates
+              </button>
               <button class="tab-btn active px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="all">All</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="project">Project Delivery</button>
               <button class="tab-btn px-4 py-2 rounded-full border border-gray-200 bg-white text-sm font-bold" data-filter="leadership">Leadership</button>
@@ -654,7 +660,12 @@
           <h2 id="modalTitle" class="text-3xl font-black tracking-tight"></h2>
           <p id="modalDescription" class="text-gray-500 mt-2"></p>
         </div>
-        <button onclick="closeTemplate()" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
+        <div class="flex items-center gap-2">
+          <button id="modalDownloadBtn" class="px-4 py-3 rounded-2xl bg-ebay-blue text-white text-sm font-bold inline-flex items-center gap-2">
+            <i data-lucide="download" class="w-4 h-4"></i> Download
+          </button>
+          <button onclick="closeTemplate()" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
       </div>
       <div class="p-6 space-y-6">
         <div class="grid md:grid-cols-3 gap-3">
@@ -866,6 +877,72 @@
       }
     }
 
+
+    function buildChangeSummaryMarkdown(tier, total, manager) {
+      const title = document.getElementById('initiativeTitle').value || '[Initiative name]';
+      const workstream = document.getElementById('projectWorkstream').value || '[Workstream]';
+      const owner = document.getElementById('projectOwner').value || '[Owner]';
+      const what = document.getElementById('whatChanging').value || '[What is changing]';
+      const why = document.getElementById('whyNow').value || '[Why now]';
+      const notChanging = document.getElementById('notChanging').value || '[What is not changing]';
+      const audience = document.getElementById('impactedAudience').value || '[Impacted audience]';
+      const impact = document.getElementById('impactDescription').value || '[What changes for them]';
+      const before = document.getElementById('beforeText').value || '[Today behavior]';
+      const after = document.getElementById('afterText').value || '[Future behavior]';
+      const friction = document.getElementById('frictionText').value || '[Expected friction]';
+      const managerRole = document.getElementById('managerRoleText').value || '[Manager role]';
+      const decision = document.getElementById('leaderDecision').value || '[Leader decision required]';
+
+      return `# Change Summary Dashboard
+
+## Initiative
+**Name:** ${title}
+**Workstream:** ${workstream}
+**Owner / sponsor:** ${owner}
+
+## Change Snapshot
+**What is changing?**
+${what}
+
+**Why now?**
+${why}
+
+**What is not changing?**
+${notChanging}
+
+## Change Impact Canvas
+**Impacted audience**
+${audience}
+
+**What changes for them?**
+${impact}
+
+**Behavior shift**
+Today: ${before}
+
+Future: ${after}
+
+**Expected friction**
+${friction}
+
+**Manager role**
+${managerRole}
+
+## Support Level Recommendation
+**Recommended tier:** ${tier}
+**Impact score:** ${total}/15
+**Manager effort:** ${manager}
+
+## Recommended templates
+${tierTemplates[tier].map(x => `- ${x}`).join('\n')}
+
+## Leader decision required
+${decision}
+
+---
+GCX Change Enablement Toolkit`;
+    }
+
     function generateSummary() {
       const { total, tier } = updateTierLive();
       const managerScore = parseInt(document.getElementById('managerDependency').value || '2', 10);
@@ -882,6 +959,9 @@
       const audience = document.getElementById('impactedAudience').value || '[audience]';
       const prompt = `Create a change summary for ${title}. Audience: ${audience}. Include why it matters, what changes, the behavior shift, expected friction, manager actions, adoption signals, and recommended ${tier} support.`;
       document.getElementById('summaryPrompt').textContent = prompt;
+      document.getElementById('downloadSummaryBtn').onclick = () => {
+        downloadTextFile(`${slugify(title)}-change-summary.md`, buildChangeSummaryMarkdown(tier, total, manager));
+      };
 
       document.getElementById('summaryCard').classList.remove('hidden');
       document.getElementById('summaryCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -915,12 +995,17 @@
       grid.innerHTML = filtered.map(t => {
         const badgeClass = t.color === 'red' ? 'badge-red' : t.color === 'yellow' ? 'badge-yellow' : t.color === 'green' ? 'badge-green' : 'badge-blue';
         return `
-          <button onclick="openTemplate('${t.id}')" class="template-card text-left card p-5">
-            <span class="badge ${badgeClass} mb-4">${t.type}</span>
-            <div class="font-black text-lg mb-2">${t.title}</div>
-            <p class="text-sm text-gray-500 leading-6">${t.desc}</p>
-            <div class="mt-4 flex items-center gap-2 text-sm font-bold text-ebay-blue">Open template <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
-          </button>
+          <div class="template-card card p-5">
+            <button onclick="openTemplate('${t.id}')" class="text-left w-full">
+              <span class="badge ${badgeClass} mb-4">${t.type}</span>
+              <div class="font-black text-lg mb-2">${t.title}</div>
+              <p class="text-sm text-gray-500 leading-6">${t.desc}</p>
+              <div class="mt-4 flex items-center gap-2 text-sm font-bold text-ebay-blue">Open template <i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+            </button>
+            <button onclick="downloadTemplate('${t.id}')" class="mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:text-ebay-blue hover:border-blue-200">
+              <i data-lucide="download" class="w-4 h-4"></i> Download editable template
+            </button>
+          </div>
         `;
       }).join('');
       lucide.createIcons();
@@ -950,8 +1035,67 @@
         </div>
       `).join('');
       document.getElementById('modalCheck').textContent = t.check;
+      document.getElementById('modalDownloadBtn').onclick = () => downloadTemplate(t.id);
       document.getElementById('templateModal').classList.remove('hidden');
       lucide.createIcons();
+    }
+
+
+    function slugify(text) {
+      return text.toLowerCase()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function buildTemplateMarkdown(t) {
+      const lines = [];
+      lines.push(`# ${t.title}`);
+      lines.push('');
+      lines.push(`**Template type:** ${t.type}`);
+      lines.push(`**Best for:** ${t.bestFor}`);
+      lines.push(`**Use when:** ${t.useWhen}`);
+      lines.push(`**Output:** ${t.output}`);
+      lines.push('');
+      lines.push('## Purpose');
+      lines.push(t.desc);
+      lines.push('');
+      lines.push('## Fill-in template');
+      lines.push('');
+      t.fields.forEach(field => {
+        lines.push(`### ${field}`);
+        lines.push('[Complete here]');
+        lines.push('');
+      });
+      lines.push('## Usefulness Check');
+      lines.push(t.check);
+      lines.push('');
+      lines.push('---');
+      lines.push('GCX Change Enablement Toolkit');
+      return lines.join('\n');
+    }
+
+    function downloadTextFile(filename, content) {
+      const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function downloadTemplate(id) {
+      const t = templates.find(x => x.id === id);
+      if (!t) return;
+      downloadTextFile(`${slugify(t.title)}.md`, buildTemplateMarkdown(t));
+    }
+
+    function downloadAllTemplates() {
+      const content = templates.map(buildTemplateMarkdown).join('\n\n');
+      downloadTextFile('gcx-change-enablement-templates.md', content);
     }
 
     function closeTemplate() {
